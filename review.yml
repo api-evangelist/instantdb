@@ -1,0 +1,107 @@
+aid: instantdb
+name: InstantDB
+review:
+  question: Does InstantDB expose a documented public WebSocket API?
+  answer: true
+  date: '2026-06-20'
+  reviewer: API Evangelist
+  asyncapiSpecCreated: true
+  asyncapiScopeNote: |
+    InstantDB IS a realtime sync engine. The client SDK's Reactor connects to a
+    persistent WebSocket at wss://api.instantdb.com/runtime/session and exchanges
+    JSON operation messages with the server. Because a genuine bidirectional
+    WebSocket (RFC 6455) transport is the heart of the product, an AsyncAPI 2.6
+    document was authored at asyncapi/instantdb-asyncapi.yml modeling that
+    channel and its message ops. This is NOT SSE - it is a real WebSocket.
+findings:
+  summary: |
+    InstantDB exposes a realtime WebSocket sync surface. The official
+    architecture essay (instantdb.com/essays/architecture) and the open-source
+    client (github.com/instantdb/instant) describe the Reactor opening a
+    WebSocket to wss://api.instantdb.com/runtime/session, sending operation
+    messages (init, add-query, remove-query, transact, set-presence, join-room,
+    leave-room, client-broadcast) and receiving server ops (init-ok,
+    add-query-ok, refresh-ok, transact-ok, patch-presence, refresh-presence,
+    server-broadcast, error). The server tails the Postgres WAL and pushes query
+    novelty (refresh-ok) to subscribers with no client polling. Separately,
+    InstantDB documents an HTTP Admin API at https://api.instantdb.com for
+    server-side InstaQL queries, InstaML transactions, auth, and storage.
+  transports:
+    - protocol: WebSocket
+      scheme: wss
+      baseURL: wss://api.instantdb.com/runtime/session
+      documented: true
+      note: Bidirectional realtime sync channel driven by the client Reactor. RFC 6455 WebSocket, not SSE.
+    - protocol: REST
+      scheme: https
+      baseURL: https://api.instantdb.com
+      documented: true
+      note: HTTP Admin API (Bearer admin token + App-Id header) for query, transact, auth, storage, presence.
+    - protocol: SSE
+      scheme: https
+      documented: true
+      note: POST /admin/subscribe-query streams query updates over HTTP Server-Sent Events as a server-side alternative to the WebSocket.
+  endpointsConfirmedRest:
+    - POST   https://api.instantdb.com/admin/query
+    - POST   https://api.instantdb.com/admin/transact
+    - POST   https://api.instantdb.com/admin/subscribe-query
+    - GET    https://api.instantdb.com/admin/users
+    - DELETE https://api.instantdb.com/admin/users
+    - POST   https://api.instantdb.com/admin/sign_out
+    - POST   https://api.instantdb.com/admin/refresh_tokens
+    - POST   https://api.instantdb.com/admin/magic_code
+    - POST   https://api.instantdb.com/admin/send_magic_code
+    - POST   https://api.instantdb.com/admin/verify_magic_code
+    - POST   https://api.instantdb.com/runtime/auth/verify_refresh_token
+    - PUT    https://api.instantdb.com/admin/storage/upload
+    - DELETE https://api.instantdb.com/admin/storage/files
+    - POST   https://api.instantdb.com/admin/storage/files/delete
+    - GET    https://api.instantdb.com/admin/rooms/presence
+  endpointsConfirmedWebSocket:
+    - wss://api.instantdb.com/runtime/session
+  websocketOps:
+    clientSends:
+      - init
+      - add-query
+      - remove-query
+      - transact
+      - set-presence
+      - join-room
+      - leave-room
+      - client-broadcast
+    serverSends:
+      - init-ok
+      - add-query-ok
+      - refresh-ok
+      - transact-ok
+      - join-room-ok
+      - patch-presence
+      - refresh-presence
+      - server-broadcast
+      - error
+sources:
+  - url: https://www.instantdb.com/docs/http-api
+    type: APIReference
+    note: Documents the HTTP Admin API base https://api.instantdb.com with Bearer admin token + App-Id header.
+  - url: https://www.instantdb.com/essays/architecture
+    type: Documentation
+    note: Describes the Reactor communicating to the server through WebSockets for queries and transactions.
+  - url: https://github.com/instantdb/instant
+    type: SourceCode
+    note: Open-source client Reactor confirms wss://api.instantdb.com/runtime/session and the op message names.
+  - url: https://www.instantdb.com/docs/presence-and-topics
+    type: Documentation
+    note: Presence, topics, and broadcast ride the realtime WebSocket (rooms, set-presence, client-broadcast).
+actions:
+  asyncapiPath: asyncapi/instantdb-asyncapi.yml
+  apisYmlUpdated: true
+  reason: |
+    A real, documented WebSocket sync surface exists and is central to the
+    product. An AsyncAPI 2.6 document was authored for the
+    wss://api.instantdb.com/runtime/session channel, modeling the client and
+    server operation messages, with WebSocket transport documented explicitly
+    (server protocol wss, ws channel bindings, info.x-transport-notes) so the
+    realtime sync layer is represented accurately and never confused with SSE.
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com

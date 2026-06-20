@@ -1,0 +1,68 @@
+specification: API Commons Rate Limits
+specificationVersion: '0.1'
+schema: https://raw.githubusercontent.com/api-evangelist/interface-research/main/schema/api-commons.yml#/$defs/RateLimits
+provider: InstantDB
+providerId: instantdb
+created: '2026-06-20'
+modified: '2026-06-20'
+reconciled: false
+tags:
+- Database
+- Realtime
+- Sync
+- Backend
+- Local First
+- Rate Limiting
+- Quotas
+- Throttling
+description: >-
+  InstantDB advertises unlimited API requests on every plan, so the primary
+  hard limits are storage-based (1GB Free, 10GB Pro, 250GB Startup) rather
+  than per-minute request quotas. Instant operates platform-level abuse and
+  fair-use protections on the Admin HTTP API and the realtime sync WebSocket;
+  specific numeric throttles are not published. Per-tier and per-endpoint
+  values are not reconciled in this artifact.
+notes: >-
+  Verify any documented per-endpoint or abuse-protection limits and the
+  HTTP status returned on throttling against InstantDB docs during
+  reconciliation; storage allotments are the main enforced ceilings.
+sources:
+- https://www.instantdb.com/pricing
+- https://www.instantdb.com/docs/http-api
+- https://www.instantdb.com/docs
+responseCodes:
+  throttled: 429
+limits:
+- name: API Requests
+  scope: app
+  metric: requests
+  limit: unlimited (per published plans)
+  notes: All plans advertise unlimited API requests; no per-minute request cap is published.
+- name: Database Storage
+  scope: app
+  metric: storage
+  limit: 1GB Free / 10GB Pro / 250GB Startup
+  notes: Storage is the primary enforced ceiling; overage billed at $0.125 per GB on paid tiers.
+- name: Admin HTTP API
+  scope: app
+  metric: requests
+  limit: see provider documentation
+  notes: Fair-use / abuse protections apply to api.instantdb.com; specific numbers not published.
+- name: Realtime Sync WebSocket
+  scope: app
+  metric: connections
+  limit: see provider documentation
+  notes: Concurrent WebSocket connections to /runtime/session are subject to platform fair-use.
+- name: Team Members
+  scope: app
+  metric: seats
+  limit: 1 Free / 10 Pro / unlimited Startup
+  notes: Seat limits per app vary by plan.
+policies:
+- name: Storage-Based Tiers
+  description: Ceilings scale with plan storage allotment rather than request-rate quotas.
+- name: Backoff Strategy
+  description: Clients should implement exponential backoff with jitter and honor Retry-After on 429.
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com

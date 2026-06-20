@@ -1,0 +1,164 @@
+aid: instantdb
+url: https://raw.githubusercontent.com/api-evangelist/instantdb/refs/heads/main/apis.yml
+name: InstantDB
+kind: company
+description: InstantDB (Instant) is a realtime client-side database and Firebase
+  alternative that gives apps a sync engine with multiplayer, offline mode, and
+  optimistic updates by default. It exposes an HTTP Admin API (api.instantdb.com)
+  for server-side InstaQL queries and InstaML transactions, plus auth, storage,
+  presence, and a realtime WebSocket sync layer.
+image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+tags:
+- Database
+- Realtime
+- Sync
+- Backend
+- Local First
+created: '2026-06-20'
+modified: '2026-06-20'
+specificationVersion: '0.19'
+apis:
+- aid: instantdb:instantdb-admin-http-api
+  name: InstantDB Admin HTTP API
+  tags:
+  - Admin
+  - HTTP
+  - Backend
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+  humanURL: https://www.instantdb.com/docs/http-api
+  baseURL: https://api.instantdb.com
+  properties:
+  - url: https://www.instantdb.com/docs/http-api
+    type: Documentation
+  - url: https://www.instantdb.com/docs/http-api
+    type: APIReference
+  - url: openapi/instantdb-openapi.yml
+    type: OpenAPI
+  - url: collections/instantdb.postman_collection.json
+    type: Postman
+  description: Server-side HTTP Admin API at api.instantdb.com, authenticated with
+    a Bearer admin token and an App-Id header, that bypasses permissions to run
+    InstaQL queries, InstaML transactions, auth, storage, and presence operations.
+- aid: instantdb:instantdb-query-instaql-api
+  name: InstantDB Query (InstaQL) API
+  tags:
+  - Query
+  - InstaQL
+  - Read
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+  humanURL: https://www.instantdb.com/docs/instaql
+  baseURL: https://api.instantdb.com
+  properties:
+  - url: https://www.instantdb.com/docs/instaql
+    type: Documentation
+  - url: https://www.instantdb.com/docs/http-api
+    type: APIReference
+  - url: openapi/instantdb-openapi.yml
+    type: OpenAPI
+  - url: collections/instantdb.postman_collection.json
+    type: Postman
+  description: Reads data with InstaQL, Instant's relational GraphQL-like query
+    language, via POST /admin/query - returning nested entities in a single
+    round trip with optional rule parameters.
+- aid: instantdb:instantdb-transactions-instaml-api
+  name: InstantDB Transactions (InstaML) API
+  tags:
+  - Transactions
+  - InstaML
+  - Write
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+  humanURL: https://www.instantdb.com/docs/instaml
+  baseURL: https://api.instantdb.com
+  properties:
+  - url: https://www.instantdb.com/docs/instaml
+    type: Documentation
+  - url: https://www.instantdb.com/docs/http-api
+    type: APIReference
+  - url: openapi/instantdb-openapi.yml
+    type: OpenAPI
+  - url: collections/instantdb.postman_collection.json
+    type: Postman
+  description: Writes, updates, links, and deletes data with InstaML transaction
+    steps via POST /admin/transact, applied atomically as an admin that bypasses
+    permission rules.
+- aid: instantdb:instantdb-auth-api
+  name: InstantDB Auth API
+  tags:
+  - Auth
+  - Tokens
+  - Magic Code
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+  humanURL: https://www.instantdb.com/docs/auth
+  baseURL: https://api.instantdb.com
+  properties:
+  - url: https://www.instantdb.com/docs/auth
+    type: Documentation
+  - url: https://www.instantdb.com/docs/http-api
+    type: APIReference
+  - url: openapi/instantdb-openapi.yml
+    type: OpenAPI
+  - url: collections/instantdb.postman_collection.json
+    type: Postman
+  description: Server-side auth - mint refresh tokens, create/send/verify magic
+    codes, look up and delete users, and sign users out - over /admin/refresh_tokens,
+    /admin/magic_code, /admin/users, and related endpoints.
+- aid: instantdb:instantdb-storage-api
+  name: InstantDB Storage API
+  tags:
+  - Storage
+  - Files
+  - Uploads
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+  humanURL: https://www.instantdb.com/docs/storage
+  baseURL: https://api.instantdb.com
+  properties:
+  - url: https://www.instantdb.com/docs/storage
+    type: Documentation
+  - url: https://www.instantdb.com/docs/http-api
+    type: APIReference
+  - url: openapi/instantdb-openapi.yml
+    type: OpenAPI
+  - url: collections/instantdb.postman_collection.json
+    type: Postman
+  description: Uploads, lists, and deletes files in Instant's object storage via
+    PUT /admin/storage/upload, the $files query namespace, and the storage delete
+    endpoints, with files surfaced as first-class entities.
+- aid: instantdb:instantdb-realtime-sync-api
+  name: InstantDB Realtime Sync API
+  tags:
+  - Realtime
+  - WebSocket
+  - Sync
+  - Presence
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+  humanURL: https://www.instantdb.com/essays/architecture
+  baseURL: wss://api.instantdb.com/runtime/session
+  properties:
+  - url: https://www.instantdb.com/essays/architecture
+    type: Documentation
+  - url: https://www.instantdb.com/docs/presence-and-topics
+    type: APIReference
+  - url: asyncapi/instantdb-asyncapi.yml
+    type: AsyncAPI
+  description: The realtime sync transport - a persistent WebSocket at
+    wss://api.instantdb.com/runtime/session over which the client Reactor sends
+    init, add-query, transact, and presence ops and the server streams query
+    novelty (refresh-ok), presence, and broadcasts back to subscribers.
+common:
+- type: GitHubOrganization
+  url: https://github.com/instantdb
+- type: LinkedIn
+  url: https://www.linkedin.com/company/instantdb
+- type: Website
+  url: https://www.instantdb.com
+- type: Documentation
+  url: https://www.instantdb.com/docs
+- type: Plans
+  url: plans/instantdb-plans-pricing.yml
+- type: RateLimits
+  url: rate-limits/instantdb-rate-limits.yml
+- type: FinOps
+  url: finops/instantdb-finops.yml
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com

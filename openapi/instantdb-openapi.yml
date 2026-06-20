@@ -1,0 +1,559 @@
+openapi: 3.0.1
+info:
+  title: InstantDB Admin HTTP API
+  description: >-
+    HTTP Admin API for InstantDB (Instant), the realtime client-side database.
+    The Admin API runs server-side at https://api.instantdb.com, authenticated
+    with a Bearer admin token plus an App-Id header, and bypasses permission
+    rules. It exposes InstaQL reads (POST /admin/query), InstaML writes
+    (POST /admin/transact), auth (refresh tokens, magic codes, users),
+    storage (upload, list, delete), and presence.
+  termsOfService: https://www.instantdb.com/terms
+  contact:
+    name: InstantDB Support
+    url: https://www.instantdb.com/docs/http-api
+  version: '1.0'
+servers:
+  - url: https://api.instantdb.com
+    description: InstantDB production Admin API
+security:
+  - adminToken: []
+tags:
+  - name: Query
+    description: InstaQL read queries.
+  - name: Transactions
+    description: InstaML transaction writes.
+  - name: Auth
+    description: Server-side authentication, tokens, and users.
+  - name: Storage
+    description: File upload, listing, and deletion.
+  - name: Presence
+    description: Room presence lookups.
+paths:
+  /admin/query:
+    post:
+      operationId: adminQuery
+      tags:
+        - Query
+      summary: Run an InstaQL query
+      description: >-
+        Executes an InstaQL read query as an admin (bypassing permissions) and
+        returns matching, nested entities. Pass `$$ruleParams` to provide
+        values referenced by permission rules. Querying the `$files` namespace
+        lists storage files.
+      parameters:
+        - $ref: '#/components/parameters/AppId'
+        - $ref: '#/components/parameters/AsEmail'
+        - $ref: '#/components/parameters/AsToken'
+        - $ref: '#/components/parameters/AsGuest'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - query
+              properties:
+                query:
+                  type: object
+                  description: An InstaQL query object.
+                  additionalProperties: true
+                $$ruleParams:
+                  type: object
+                  description: Optional values referenced by permission rules.
+                  additionalProperties: true
+            example:
+              query:
+                goals:
+                  todos: {}
+      responses:
+        '200':
+          description: Query result with nested entities.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+        '400':
+          $ref: '#/components/responses/Error'
+        '401':
+          $ref: '#/components/responses/Error'
+  /admin/transact:
+    post:
+      operationId: adminTransact
+      tags:
+        - Transactions
+      summary: Apply InstaML transaction steps
+      description: >-
+        Atomically applies an array of InstaML transaction steps (update, merge,
+        delete, link, unlink) as an admin. Each step is a tuple of
+        `[action, namespace, id, args]`.
+      parameters:
+        - $ref: '#/components/parameters/AppId'
+        - $ref: '#/components/parameters/AsEmail'
+        - $ref: '#/components/parameters/AsToken'
+        - $ref: '#/components/parameters/AsGuest'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - steps
+              properties:
+                steps:
+                  type: array
+                  description: Array of InstaML transaction step tuples.
+                  items:
+                    type: array
+            example:
+              steps:
+                - - update
+                  - goals
+                  - 8aa64e4c-64f9-472e-8a61-3fa28870e6cb
+                  - title: Get fit
+      responses:
+        '200':
+          description: Transaction applied; returns transaction id.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+        '400':
+          $ref: '#/components/responses/Error'
+        '401':
+          $ref: '#/components/responses/Error'
+  /admin/refresh_tokens:
+    post:
+      operationId: adminRefreshTokens
+      tags:
+        - Auth
+      summary: Create a refresh token for a user
+      description: >-
+        Generates an auth (refresh) token for a user identified by email or id,
+        creating the user if they do not already exist. Optionally set custom
+        `$users` fields with `extra-fields`.
+      parameters:
+        - $ref: '#/components/parameters/AppId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+                id:
+                  type: string
+                extra-fields:
+                  type: object
+                  additionalProperties: true
+            example:
+              email: alyssa_p_hacker@instantdb.com
+      responses:
+        '200':
+          description: A user record with a refresh token.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+        '401':
+          $ref: '#/components/responses/Error'
+  /admin/magic_code:
+    post:
+      operationId: adminCreateMagicCode
+      tags:
+        - Auth
+      summary: Create a magic code
+      description: >-
+        Creates a magic code for the given email without sending it, so you can
+        deliver it through your own provider.
+      parameters:
+        - $ref: '#/components/parameters/AppId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - email
+              properties:
+                email:
+                  type: string
+                  format: email
+      responses:
+        '200':
+          description: The generated magic code.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+  /admin/send_magic_code:
+    post:
+      operationId: adminSendMagicCode
+      tags:
+        - Auth
+      summary: Create and send a magic code
+      description: Creates a magic code and sends it to the email via Instant's provider.
+      parameters:
+        - $ref: '#/components/parameters/AppId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - email
+              properties:
+                email:
+                  type: string
+                  format: email
+      responses:
+        '200':
+          description: Magic code sent.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+  /admin/verify_magic_code:
+    post:
+      operationId: adminVerifyMagicCode
+      tags:
+        - Auth
+      summary: Verify a magic code
+      description: >-
+        Verifies a magic code for an email and returns the user, creating it if
+        needed. Optionally set custom `$users` fields with `extra-fields`.
+      parameters:
+        - $ref: '#/components/parameters/AppId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - email
+                - code
+              properties:
+                email:
+                  type: string
+                  format: email
+                code:
+                  type: string
+                extra-fields:
+                  type: object
+                  additionalProperties: true
+      responses:
+        '200':
+          description: The verified user with a refresh token.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+  /admin/users:
+    get:
+      operationId: adminGetUser
+      tags:
+        - Auth
+      summary: Look up a user
+      description: Fetches an app user by email, id, or refresh_token.
+      parameters:
+        - $ref: '#/components/parameters/AppId'
+        - name: email
+          in: query
+          schema:
+            type: string
+            format: email
+        - name: id
+          in: query
+          schema:
+            type: string
+        - name: refresh_token
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: The matching user.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+        '404':
+          $ref: '#/components/responses/Error'
+    delete:
+      operationId: adminDeleteUser
+      tags:
+        - Auth
+      summary: Delete a user
+      description: Permanently deletes an app user by email, id, or refresh_token.
+      parameters:
+        - $ref: '#/components/parameters/AppId'
+        - name: email
+          in: query
+          schema:
+            type: string
+            format: email
+        - name: id
+          in: query
+          schema:
+            type: string
+        - name: refresh_token
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: The deleted user.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+  /admin/sign_out:
+    post:
+      operationId: adminSignOut
+      tags:
+        - Auth
+      summary: Sign a user out
+      description: >-
+        Invalidates a user's sessions / refresh tokens. Identify the user by
+        email, id, or refresh_token.
+      parameters:
+        - $ref: '#/components/parameters/AppId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+                id:
+                  type: string
+                refresh_token:
+                  type: string
+      responses:
+        '200':
+          description: Sign-out succeeded.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+  /runtime/auth/verify_refresh_token:
+    post:
+      operationId: verifyRefreshToken
+      tags:
+        - Auth
+      summary: Verify a refresh token
+      description: Validates a refresh token for an app and returns the associated user.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - app-id
+                - refresh-token
+              properties:
+                app-id:
+                  type: string
+                refresh-token:
+                  type: string
+      responses:
+        '200':
+          description: The user associated with the refresh token.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+        '401':
+          $ref: '#/components/responses/Error'
+  /admin/storage/upload:
+    put:
+      operationId: adminStorageUpload
+      tags:
+        - Storage
+      summary: Upload a file
+      description: >-
+        Uploads a file to Instant storage. Supply the destination via the `Path`
+        header and the appropriate `Content-Type`; the request body is the raw
+        binary file content.
+      parameters:
+        - $ref: '#/components/parameters/AppId'
+        - name: Path
+          in: header
+          required: true
+          description: Destination path for the uploaded file.
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/octet-stream:
+            schema:
+              type: string
+              format: binary
+      responses:
+        '200':
+          description: The created file record.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+  /admin/storage/files:
+    delete:
+      operationId: adminStorageDeleteFile
+      tags:
+        - Storage
+      summary: Delete a single file
+      description: Deletes one file by its storage path.
+      parameters:
+        - $ref: '#/components/parameters/AppId'
+        - name: filename
+          in: query
+          required: true
+          description: The storage path of the file to delete.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: File deleted.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+  /admin/storage/files/delete:
+    post:
+      operationId: adminStorageDeleteFiles
+      tags:
+        - Storage
+      summary: Delete multiple files
+      description: Deletes multiple files in one request by their storage paths.
+      parameters:
+        - $ref: '#/components/parameters/AppId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - filenames
+              properties:
+                filenames:
+                  type: array
+                  items:
+                    type: string
+            example:
+              filenames:
+                - images/cat.png
+                - docs/readme.txt
+      responses:
+        '200':
+          description: Files deleted.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+  /admin/rooms/presence:
+    get:
+      operationId: adminRoomPresence
+      tags:
+        - Presence
+      summary: Get room presence
+      description: >-
+        Returns the users currently present in a realtime room, identified by
+        room-type and room-id.
+      parameters:
+        - $ref: '#/components/parameters/AppId'
+        - name: room-type
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: room-id
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Current presence for the room.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+components:
+  securitySchemes:
+    adminToken:
+      type: http
+      scheme: bearer
+      description: >-
+        Admin token issued in the InstantDB dashboard, sent as
+        `Authorization: Bearer $ADMIN_TOKEN`.
+  parameters:
+    AppId:
+      name: App-Id
+      in: header
+      required: true
+      description: The Instant application id.
+      schema:
+        type: string
+    AsEmail:
+      name: As-Email
+      in: header
+      required: false
+      description: Impersonate the user with this email (requires admin token).
+      schema:
+        type: string
+        format: email
+    AsToken:
+      name: As-Token
+      in: header
+      required: false
+      description: Impersonate the user holding this refresh token.
+      schema:
+        type: string
+    AsGuest:
+      name: As-Guest
+      in: header
+      required: false
+      description: Run the request as an unauthenticated guest.
+      schema:
+        type: boolean
+  responses:
+    Error:
+      description: Error response.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              type:
+                type: string
+              message:
+                type: string
+            additionalProperties: true

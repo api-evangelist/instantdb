@@ -1,0 +1,339 @@
+{
+  "info": {
+    "name": "InstantDB Admin HTTP API",
+    "description": "HTTP Admin API for InstantDB (Instant), the realtime client-side database. Base URL https://api.instantdb.com, authenticated with a Bearer admin token plus an App-Id header. Covers InstaQL queries, InstaML transactions, auth, storage, and presence.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{adminToken}}",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "https://api.instantdb.com"
+    },
+    {
+      "key": "adminToken",
+      "value": ""
+    },
+    {
+      "key": "appId",
+      "value": ""
+    },
+    {
+      "key": "refreshToken",
+      "value": ""
+    }
+  ],
+  "item": [
+    {
+      "name": "Data",
+      "item": [
+        {
+          "name": "Run an InstaQL query",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "App-Id", "value": "{{appId}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/admin/query",
+              "host": ["{{baseUrl}}"],
+              "path": ["admin", "query"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"query\": {\n    \"goals\": {\n      \"todos\": {}\n    }\n  }\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "description": "Executes an InstaQL read query as an admin (bypassing permissions) and returns nested entities. Querying $files lists storage files."
+          }
+        },
+        {
+          "name": "Apply InstaML transaction steps",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "App-Id", "value": "{{appId}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/admin/transact",
+              "host": ["{{baseUrl}}"],
+              "path": ["admin", "transact"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"steps\": [\n    [\"update\", \"goals\", \"8aa64e4c-64f9-472e-8a61-3fa28870e6cb\", { \"title\": \"Get fit\" }]\n  ]\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "description": "Atomically applies InstaML transaction steps as an admin."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Create refresh token",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "App-Id", "value": "{{appId}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/admin/refresh_tokens",
+              "host": ["{{baseUrl}}"],
+              "path": ["admin", "refresh_tokens"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"alyssa_p_hacker@instantdb.com\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "description": "Generates an auth token for a user, creating the user if needed."
+          }
+        },
+        {
+          "name": "Create magic code",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "App-Id", "value": "{{appId}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/admin/magic_code",
+              "host": ["{{baseUrl}}"],
+              "path": ["admin", "magic_code"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"alyssa_p_hacker@instantdb.com\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "description": "Creates a magic code without sending it."
+          }
+        },
+        {
+          "name": "Send magic code",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "App-Id", "value": "{{appId}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/admin/send_magic_code",
+              "host": ["{{baseUrl}}"],
+              "path": ["admin", "send_magic_code"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"alyssa_p_hacker@instantdb.com\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "description": "Creates and sends a magic code via Instant's provider."
+          }
+        },
+        {
+          "name": "Verify magic code",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "App-Id", "value": "{{appId}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/admin/verify_magic_code",
+              "host": ["{{baseUrl}}"],
+              "path": ["admin", "verify_magic_code"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"alyssa_p_hacker@instantdb.com\",\n  \"code\": \"123456\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "description": "Verifies a magic code and returns the user."
+          }
+        },
+        {
+          "name": "Verify refresh token",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/runtime/auth/verify_refresh_token",
+              "host": ["{{baseUrl}}"],
+              "path": ["runtime", "auth", "verify_refresh_token"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"app-id\": \"{{appId}}\",\n  \"refresh-token\": \"{{refreshToken}}\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "description": "Validates a refresh token for an app."
+          }
+        },
+        {
+          "name": "Get user",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "App-Id", "value": "{{appId}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/admin/users?email=alyssa_p_hacker@instantdb.com",
+              "host": ["{{baseUrl}}"],
+              "path": ["admin", "users"],
+              "query": [
+                { "key": "email", "value": "alyssa_p_hacker@instantdb.com" }
+              ]
+            },
+            "description": "Fetches an app user by email, id, or refresh_token."
+          }
+        },
+        {
+          "name": "Delete user",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              { "key": "App-Id", "value": "{{appId}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/admin/users?email=alyssa_p_hacker@instantdb.com",
+              "host": ["{{baseUrl}}"],
+              "path": ["admin", "users"],
+              "query": [
+                { "key": "email", "value": "alyssa_p_hacker@instantdb.com" }
+              ]
+            },
+            "description": "Permanently deletes an app user."
+          }
+        },
+        {
+          "name": "Sign out",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "App-Id", "value": "{{appId}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/admin/sign_out",
+              "host": ["{{baseUrl}}"],
+              "path": ["admin", "sign_out"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"alyssa_p_hacker@instantdb.com\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "description": "Invalidates a user's sessions / refresh tokens."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Storage",
+      "item": [
+        {
+          "name": "Upload file",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "App-Id", "value": "{{appId}}" },
+              { "key": "Path", "value": "images/cat.png" },
+              { "key": "Content-Type", "value": "image/png" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/admin/storage/upload",
+              "host": ["{{baseUrl}}"],
+              "path": ["admin", "storage", "upload"]
+            },
+            "body": {
+              "mode": "file",
+              "file": {}
+            },
+            "description": "Uploads a file; destination set via the Path header, body is binary content."
+          }
+        },
+        {
+          "name": "Delete single file",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              { "key": "App-Id", "value": "{{appId}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/admin/storage/files?filename=images/cat.png",
+              "host": ["{{baseUrl}}"],
+              "path": ["admin", "storage", "files"],
+              "query": [
+                { "key": "filename", "value": "images/cat.png" }
+              ]
+            },
+            "description": "Deletes one file by storage path."
+          }
+        },
+        {
+          "name": "Delete multiple files",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "App-Id", "value": "{{appId}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/admin/storage/files/delete",
+              "host": ["{{baseUrl}}"],
+              "path": ["admin", "storage", "files", "delete"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"filenames\": [\"images/cat.png\", \"docs/readme.txt\"]\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "description": "Deletes multiple files in one request."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Presence",
+      "item": [
+        {
+          "name": "Get room presence",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "App-Id", "value": "{{appId}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/admin/rooms/presence?room-type=chat&room-id=room-123",
+              "host": ["{{baseUrl}}"],
+              "path": ["admin", "rooms", "presence"],
+              "query": [
+                { "key": "room-type", "value": "chat" },
+                { "key": "room-id", "value": "room-123" }
+              ]
+            },
+            "description": "Returns users currently present in a realtime room."
+          }
+        }
+      ]
+    }
+  ]
+}

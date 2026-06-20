@@ -1,0 +1,446 @@
+asyncapi: '2.6.0'
+id: 'urn:com:instantdb:runtime:session'
+info:
+  title: InstantDB Realtime Sync (WebSocket)
+  version: '1.0.0'
+  description: |
+    AsyncAPI 2.6 description of InstantDB's **realtime sync** surface.
+
+    Unlike a request/response REST API, InstantDB is a sync engine. The client
+    SDK's **Reactor** opens a persistent WebSocket connection to
+    `wss://api.instantdb.com/runtime/session` and exchanges JSON messages with
+    the server's session manager. Each message is a JSON object whose `op`
+    field names the operation. The client sends ops such as `init`,
+    `add-query`, `remove-query`, `transact`, `set-presence`, `join-room`,
+    `leave-room`, and `client-broadcast`; the server replies with and pushes
+    ops such as `init-ok`, `add-query-ok`, `refresh-ok`, `transact-ok`,
+    `patch-presence`, `refresh-presence`, `server-broadcast`, and `error`.
+
+    The server tails the Postgres write-ahead log to detect novelty, then
+    invalidates and re-pushes affected queries to subscribed clients via
+    `refresh-ok` without any client polling. This is a genuine bidirectional
+    WebSocket transport (RFC 6455), not HTTP Server-Sent Events.
+
+    The companion server-side HTTP Admin API (POST /admin/query,
+    POST /admin/transact, auth, storage) is modeled in
+    `openapi/instantdb-openapi.yml`.
+  contact:
+    name: API Evangelist
+    email: kin@apievangelist.com
+    url: https://apievangelist.com
+  license:
+    name: API documentation - InstantDB Terms of Service
+    url: https://www.instantdb.com/terms
+  x-transport-notes:
+    transport: WebSocket (RFC 6455)
+    protocol: wss
+    endpoint: wss://api.instantdb.com/runtime/session
+    direction: bidirectional
+    mediaType: application/json
+    messageEnvelope: 'JSON object with an `op` discriminator field'
+    novelty: 'Server tails Postgres WAL and pushes refresh-ok to affected subscribers'
+    notSSE: true
+    source: https://www.instantdb.com/essays/architecture
+defaultContentType: application/json
+servers:
+  runtime:
+    url: api.instantdb.com/runtime/session
+    protocol: wss
+    description: |
+      InstantDB realtime sync endpoint. The client Reactor connects here over
+      a secure WebSocket (wss://) and authenticates within the `init` message
+      by sending the app id and a refresh token. All subsequent query
+      subscriptions, transactions, presence, and broadcasts flow over this
+      single connection.
+channels:
+  /runtime/session:
+    description: |
+      The single multiplexed WebSocket channel for an Instant app session.
+      The client publishes operation messages (init, add-query, transact,
+      presence, room, broadcast) and subscribes to the server's
+      acknowledgements and pushed novelty. Messages are correlated with a
+      client-generated `client-event-id`.
+    bindings:
+      ws:
+        bindingVersion: '0.1.0'
+    publish:
+      operationId: sendClientOps
+      summary: Operations the client Reactor sends to the sync server.
+      description: |
+        Each message is a JSON object with an `op` field. `init` must be sent
+        first to authenticate and establish the session; afterwards the client
+        registers queries, applies transactions, and manages presence/rooms.
+      message:
+        oneOf:
+          - $ref: '#/components/messages/Init'
+          - $ref: '#/components/messages/AddQuery'
+          - $ref: '#/components/messages/RemoveQuery'
+          - $ref: '#/components/messages/Transact'
+          - $ref: '#/components/messages/JoinRoom'
+          - $ref: '#/components/messages/LeaveRoom'
+          - $ref: '#/components/messages/SetPresence'
+          - $ref: '#/components/messages/ClientBroadcast'
+    subscribe:
+      operationId: receiveServerOps
+      summary: Operations the sync server pushes to the client.
+      description: |
+        The server acknowledges client ops and proactively pushes query
+        novelty and presence. `refresh-ok` carries updated query results
+        whenever the server detects relevant changes in Postgres.
+      message:
+        oneOf:
+          - $ref: '#/components/messages/InitOk'
+          - $ref: '#/components/messages/AddQueryOk'
+          - $ref: '#/components/messages/RefreshOk'
+          - $ref: '#/components/messages/TransactOk'
+          - $ref: '#/components/messages/JoinRoomOk'
+          - $ref: '#/components/messages/PatchPresence'
+          - $ref: '#/components/messages/RefreshPresence'
+          - $ref: '#/components/messages/ServerBroadcast'
+          - $ref: '#/components/messages/ErrorMessage'
+components:
+  messages:
+    Init:
+      name: init
+      title: Initialize session
+      summary: Authenticate and open the session.
+      contentType: application/json
+      payload:
+        type: object
+        required:
+          - op
+          - app-id
+        properties:
+          op:
+            type: string
+            const: init
+          app-id:
+            type: string
+          'refresh-token':
+            type: string
+            description: Optional auth token for the current user.
+          'client-event-id':
+            type: string
+          versions:
+            type: object
+            description: SDK package versions (e.g. '@instantdb/core').
+            additionalProperties:
+              type: string
+    AddQuery:
+      name: add-query
+      title: Subscribe to a query
+      summary: Register an InstaQL query for live updates.
+      contentType: application/json
+      payload:
+        type: object
+        required:
+          - op
+          - q
+        properties:
+          op:
+            type: string
+            const: add-query
+          q:
+            type: object
+            description: An InstaQL query object.
+            additionalProperties: true
+          'client-event-id':
+            type: string
+    RemoveQuery:
+      name: remove-query
+      title: Unsubscribe from a query
+      contentType: application/json
+      payload:
+        type: object
+        required:
+          - op
+          - q
+        properties:
+          op:
+            type: string
+            const: remove-query
+          q:
+            type: object
+            additionalProperties: true
+          'client-event-id':
+            type: string
+    Transact:
+      name: transact
+      title: Apply a transaction
+      summary: Send InstaML transaction steps over the socket.
+      contentType: application/json
+      payload:
+        type: object
+        required:
+          - op
+          - 'tx-steps'
+        properties:
+          op:
+            type: string
+            const: transact
+          'tx-steps':
+            type: array
+            items:
+              type: array
+          'client-event-id':
+            type: string
+    JoinRoom:
+      name: join-room
+      title: Join a presence room
+      contentType: application/json
+      payload:
+        type: object
+        required:
+          - op
+          - 'room-id'
+        properties:
+          op:
+            type: string
+            const: join-room
+          'room-id':
+            type: string
+          'client-event-id':
+            type: string
+    LeaveRoom:
+      name: leave-room
+      title: Leave a presence room
+      contentType: application/json
+      payload:
+        type: object
+        required:
+          - op
+          - 'room-id'
+        properties:
+          op:
+            type: string
+            const: leave-room
+          'room-id':
+            type: string
+          'client-event-id':
+            type: string
+    SetPresence:
+      name: set-presence
+      title: Set presence data
+      summary: Publish this client's ephemeral presence into a room.
+      contentType: application/json
+      payload:
+        type: object
+        required:
+          - op
+          - 'room-id'
+        properties:
+          op:
+            type: string
+            const: set-presence
+          'room-id':
+            type: string
+          data:
+            type: object
+            additionalProperties: true
+          'client-event-id':
+            type: string
+    ClientBroadcast:
+      name: client-broadcast
+      title: Broadcast a topic message
+      summary: Send an ephemeral topic event to others in a room.
+      contentType: application/json
+      payload:
+        type: object
+        required:
+          - op
+          - 'room-id'
+          - topic
+        properties:
+          op:
+            type: string
+            const: client-broadcast
+          'room-id':
+            type: string
+          topic:
+            type: string
+          data:
+            type: object
+            additionalProperties: true
+          'client-event-id':
+            type: string
+    InitOk:
+      name: init-ok
+      title: Session initialized
+      contentType: application/json
+      payload:
+        type: object
+        required:
+          - op
+        properties:
+          op:
+            type: string
+            const: init-ok
+          'session-id':
+            type: string
+          'client-event-id':
+            type: string
+    AddQueryOk:
+      name: add-query-ok
+      title: Query registered
+      summary: Acknowledges a query subscription and returns initial results.
+      contentType: application/json
+      payload:
+        type: object
+        required:
+          - op
+        properties:
+          op:
+            type: string
+            const: add-query-ok
+          q:
+            type: object
+            additionalProperties: true
+          result:
+            type: array
+            items:
+              type: object
+              additionalProperties: true
+          'client-event-id':
+            type: string
+    RefreshOk:
+      name: refresh-ok
+      title: Query novelty pushed
+      summary: Server-pushed updated results when underlying data changes.
+      contentType: application/json
+      payload:
+        type: object
+        required:
+          - op
+        properties:
+          op:
+            type: string
+            const: refresh-ok
+          computations:
+            type: array
+            description: Updated query computations and their results.
+            items:
+              type: object
+              additionalProperties: true
+          attrs:
+            type: array
+            items:
+              type: object
+              additionalProperties: true
+    TransactOk:
+      name: transact-ok
+      title: Transaction committed
+      contentType: application/json
+      payload:
+        type: object
+        required:
+          - op
+        properties:
+          op:
+            type: string
+            const: transact-ok
+          'tx-id':
+            type: integer
+          'client-event-id':
+            type: string
+    JoinRoomOk:
+      name: join-room-ok
+      title: Room joined
+      contentType: application/json
+      payload:
+        type: object
+        required:
+          - op
+        properties:
+          op:
+            type: string
+            const: join-room-ok
+          'room-id':
+            type: string
+          'client-event-id':
+            type: string
+    PatchPresence:
+      name: patch-presence
+      title: Presence patch
+      summary: Incremental presence change for peers in a room.
+      contentType: application/json
+      payload:
+        type: object
+        required:
+          - op
+        properties:
+          op:
+            type: string
+            const: patch-presence
+          'room-id':
+            type: string
+          edits:
+            type: array
+            items:
+              type: object
+              additionalProperties: true
+    RefreshPresence:
+      name: refresh-presence
+      title: Full presence refresh
+      summary: Full presence snapshot for a room.
+      contentType: application/json
+      payload:
+        type: object
+        required:
+          - op
+        properties:
+          op:
+            type: string
+            const: refresh-presence
+          'room-id':
+            type: string
+          data:
+            type: object
+            additionalProperties: true
+    ServerBroadcast:
+      name: server-broadcast
+      title: Broadcast received
+      summary: A topic event broadcast by another client in the room.
+      contentType: application/json
+      payload:
+        type: object
+        required:
+          - op
+        properties:
+          op:
+            type: string
+            const: server-broadcast
+          'room-id':
+            type: string
+          topic:
+            type: string
+          data:
+            type: object
+            additionalProperties: true
+    ErrorMessage:
+      name: error
+      title: Error
+      summary: An error tied to a prior client op (by client-event-id).
+      contentType: application/json
+      payload:
+        type: object
+        required:
+          - op
+        properties:
+          op:
+            type: string
+            const: error
+          status:
+            type: integer
+          message:
+            type: string
+          type:
+            type: string
+          'client-event-id':
+            type: string
+  securitySchemes:
+    refreshToken:
+      type: userPassword
+      description: >-
+        Authentication is performed inside the `init` message by supplying the
+        app id and an optional user refresh token; there is no separate
+        WebSocket auth header.

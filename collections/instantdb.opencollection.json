@@ -1,0 +1,241 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "InstantDB Admin HTTP API",
+    "version": "1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{adminToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Data",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Run an InstaQL query",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.instantdb.com/admin/query",
+            "body": {
+              "type": "json",
+              "data": "{\n  \"query\": {\n    \"goals\": {\n      \"todos\": {}\n    }\n  }\n}"
+            }
+          },
+          "docs": "Executes an InstaQL read query as an admin and returns nested entities."
+        },
+        {
+          "info": {
+            "name": "Apply InstaML transaction steps",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.instantdb.com/admin/transact",
+            "body": {
+              "type": "json",
+              "data": "{\n  \"steps\": [\n    [\"update\", \"goals\", \"8aa64e4c-64f9-472e-8a61-3fa28870e6cb\", { \"title\": \"Get fit\" }]\n  ]\n}"
+            }
+          },
+          "docs": "Atomically applies InstaML transaction steps as an admin."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Auth",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Create refresh token",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.instantdb.com/admin/refresh_tokens",
+            "body": {
+              "type": "json",
+              "data": "{\n  \"email\": \"alyssa_p_hacker@instantdb.com\"\n}"
+            }
+          },
+          "docs": "Generates an auth token for a user, creating the user if needed."
+        },
+        {
+          "info": {
+            "name": "Create magic code",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.instantdb.com/admin/magic_code",
+            "body": {
+              "type": "json",
+              "data": "{\n  \"email\": \"alyssa_p_hacker@instantdb.com\"\n}"
+            }
+          },
+          "docs": "Creates a magic code without sending it."
+        },
+        {
+          "info": {
+            "name": "Send magic code",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.instantdb.com/admin/send_magic_code",
+            "body": {
+              "type": "json",
+              "data": "{\n  \"email\": \"alyssa_p_hacker@instantdb.com\"\n}"
+            }
+          },
+          "docs": "Creates and sends a magic code via Instant's provider."
+        },
+        {
+          "info": {
+            "name": "Verify magic code",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.instantdb.com/admin/verify_magic_code",
+            "body": {
+              "type": "json",
+              "data": "{\n  \"email\": \"alyssa_p_hacker@instantdb.com\",\n  \"code\": \"123456\"\n}"
+            }
+          },
+          "docs": "Verifies a magic code and returns the user."
+        },
+        {
+          "info": {
+            "name": "Verify refresh token",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.instantdb.com/runtime/auth/verify_refresh_token",
+            "body": {
+              "type": "json",
+              "data": "{\n  \"app-id\": \"{{appId}}\",\n  \"refresh-token\": \"{{refreshToken}}\"\n}"
+            }
+          },
+          "docs": "Validates a refresh token for an app."
+        },
+        {
+          "info": {
+            "name": "Get user",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.instantdb.com/admin/users?email=alyssa_p_hacker@instantdb.com"
+          },
+          "docs": "Fetches an app user by email, id, or refresh_token."
+        },
+        {
+          "info": {
+            "name": "Delete user",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.instantdb.com/admin/users?email=alyssa_p_hacker@instantdb.com"
+          },
+          "docs": "Permanently deletes an app user."
+        },
+        {
+          "info": {
+            "name": "Sign out",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.instantdb.com/admin/sign_out",
+            "body": {
+              "type": "json",
+              "data": "{\n  \"email\": \"alyssa_p_hacker@instantdb.com\"\n}"
+            }
+          },
+          "docs": "Invalidates a user's sessions / refresh tokens."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Storage",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Upload file",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api.instantdb.com/admin/storage/upload",
+            "body": {
+              "type": "binary",
+              "data": ""
+            }
+          },
+          "docs": "Uploads a file; destination set via the Path header, body is binary content."
+        },
+        {
+          "info": {
+            "name": "Delete single file",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.instantdb.com/admin/storage/files?filename=images/cat.png"
+          },
+          "docs": "Deletes one file by storage path."
+        },
+        {
+          "info": {
+            "name": "Delete multiple files",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.instantdb.com/admin/storage/files/delete",
+            "body": {
+              "type": "json",
+              "data": "{\n  \"filenames\": [\"images/cat.png\", \"docs/readme.txt\"]\n}"
+            }
+          },
+          "docs": "Deletes multiple files in one request."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Presence",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get room presence",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.instantdb.com/admin/rooms/presence?room-type=chat&room-id=room-123"
+          },
+          "docs": "Returns users currently present in a realtime room."
+        }
+      ]
+    }
+  ]
+}

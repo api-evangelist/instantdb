@@ -1,0 +1,179 @@
+specification: API Commons Plans
+specificationVersion: '0.1'
+schema: https://raw.githubusercontent.com/api-evangelist/interface-research/main/schema/api-commons.yml#/$defs/Plans
+provider: InstantDB
+providerId: instantdb
+created: '2026-06-20'
+modified: '2026-06-20'
+reconciled: true
+tags:
+- Database
+- Realtime
+- Sync
+- Backend
+- Local First
+- Plans
+description: >-
+  InstantDB (Instant) uses simple seat/usage tiers anchored on database
+  storage. The Free tier is generous (unlimited API requests, 1GB storage,
+  one team member, never pauses, commercial use allowed). Pro adds more
+  storage and team members and daily backups; Startup scales storage and
+  team further with Slack support; Enterprise is custom with SLAs and
+  extended backup retention. Storage overage on paid tiers is $0.125 per GB.
+notes: >-
+  Pricing as published on the InstantDB pricing page; verify current limits,
+  storage allotments, and overage rates on the page during reconciliation.
+sources:
+- https://www.instantdb.com/pricing
+- https://www.instantdb.com/docs
+plans:
+- id: instantdb-free
+  name: Free
+  type: free
+  description: >-
+    Generous free tier to get an app off the ground - unlimited API requests,
+    1GB database space, community support, one team member per app, never
+    pauses, and commercial use allowed. No credit card required.
+  entries:
+  - label: Database Space
+    name: database_space
+    type: limit
+    metric: storage
+    limit: 1
+    timeFrame: month
+    geo: global
+    unit: 1
+    price: included (GB)
+    userMultiplied: false
+  - label: API Requests
+    name: api_requests
+    type: limit
+    metric: requests
+    limit: -1
+    timeFrame: month
+    geo: global
+    unit: 1
+    price: unlimited
+    userMultiplied: false
+  - label: Team Members
+    name: team_members
+    type: limit
+    metric: seats
+    limit: 1
+    timeFrame: month
+    geo: global
+    unit: 1
+    price: 1 per app
+    userMultiplied: false
+  elements:
+  - name: Realtime Sync
+  - name: Auth
+  - name: Storage
+  - name: Presence
+  - name: Community Support
+- id: instantdb-pro
+  name: Pro
+  type: paid
+  description: >-
+    Everything in Free plus 10GB database space (then $0.125/GB), priority
+    support, up to 10 team members per app, and daily backups for the last
+    7 days.
+  entries:
+  - label: Monthly Subscription
+    name: pro_subscription
+    type: flat
+    metric: subscription
+    limit: -1
+    timeFrame: month
+    geo: global
+    unit: 1
+    price: $30 per month
+    userMultiplied: false
+  - label: Database Space
+    name: database_space
+    type: limit
+    metric: storage
+    limit: 10
+    timeFrame: month
+    geo: global
+    unit: 1
+    price: 10GB included, then $0.125 per GB
+    userMultiplied: false
+  - label: Team Members
+    name: team_members
+    type: limit
+    metric: seats
+    limit: 10
+    timeFrame: month
+    geo: global
+    unit: 1
+    price: up to 10 per app
+    userMultiplied: false
+  elements:
+  - name: Priority Support
+  - name: Daily Backups (7 days)
+- id: instantdb-startup
+  name: Startup
+  type: paid
+  description: >-
+    Everything in Pro plus 250GB database space (then $0.125/GB), Slack
+    support, unlimited team members per app, and multiple professional-grade
+    applications.
+  entries:
+  - label: Monthly Subscription
+    name: startup_subscription
+    type: flat
+    metric: subscription
+    limit: -1
+    timeFrame: month
+    geo: global
+    unit: 1
+    price: $600 per month
+    userMultiplied: false
+  - label: Database Space
+    name: database_space
+    type: limit
+    metric: storage
+    limit: 250
+    timeFrame: month
+    geo: global
+    unit: 1
+    price: 250GB included, then $0.125 per GB
+    userMultiplied: false
+  - label: Team Members
+    name: team_members
+    type: limit
+    metric: seats
+    limit: -1
+    timeFrame: month
+    geo: global
+    unit: 1
+    price: unlimited per app
+    userMultiplied: false
+  elements:
+  - name: Slack Support
+  - name: Multiple Applications
+- id: instantdb-enterprise
+  name: Enterprise
+  type: enterprise
+  description: >-
+    Everything in Startup plus premium support, uptime SLAs, and extended
+    daily backups retained for 30 days. Contact InstantDB for pricing.
+  entries:
+  - label: Enterprise Agreement
+    name: enterprise
+    type: flat
+    metric: contract
+    limit: -1
+    timeFrame: year
+    geo: global
+    unit: 1
+    price: contact sales
+    userMultiplied: false
+  elements:
+  - name: Premium Support
+  - name: Uptime SLAs
+  - name: Daily Backups (30 days)
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com
