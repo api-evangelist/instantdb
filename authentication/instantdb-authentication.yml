@@ -1,0 +1,14 @@
+generated: '2026-07-11'
+method: derived
+source: openapi/instantdb-openapi.yml
+summary:
+  types:
+  - http
+schemes:
+- name: adminToken
+  type: http
+  scheme: bearer
+  description: 'Admin token issued in the InstantDB dashboard, sent as `Authorization: Bearer
+    $ADMIN_TOKEN`.'
+  sources:
+  - openapi/instantdb-openapi.yml

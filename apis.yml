@@ -145,6 +145,10 @@ apis:
     init, add-query, transact, and presence ops and the server streams query
     novelty (refresh-ok), presence, and broadcasts back to subscribers.
 common:
+- type: DomainSecurity
+  url: security/instantdb-domain-security.yml
+- type: Authentication
+  url: authentication/instantdb-authentication.yml
 - type: GitHubOrganization
   url: https://github.com/instantdb
 - type: LinkedIn
@@ -159,6 +163,8 @@ common:
   url: rate-limits/instantdb-rate-limits.yml
 - type: FinOps
   url: finops/instantdb-finops.yml
+- url: https://www.instantdb.com/rss.xml
+  type: Blog
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
