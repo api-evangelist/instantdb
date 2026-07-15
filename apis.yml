@@ -145,6 +145,8 @@ apis:
     init, add-query, transact, and presence ops and the server streams query
     novelty (refresh-ok), presence, and broadcasts back to subscribers.
 common:
+- type: AgenticAccess
+  url: agentic-access/instantdb-agentic-access.yml
 - type: DomainSecurity
   url: security/instantdb-domain-security.yml
 - type: Authentication
