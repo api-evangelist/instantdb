@@ -1,0 +1,111 @@
+openapi: 3.0.1
+info:
+  title: InstantDB Admin HTTP Auth Transactions API
+  description: HTTP Admin API for InstantDB (Instant), the realtime client-side database. The Admin API runs server-side at https://api.instantdb.com, authenticated with a Bearer admin token plus an App-Id header, and bypasses permission rules. It exposes InstaQL reads (POST /admin/query), InstaML writes (POST /admin/transact), auth (refresh tokens, magic codes, users), storage (upload, list, delete), and presence.
+  termsOfService: https://www.instantdb.com/terms
+  contact:
+    name: InstantDB Support
+    url: https://www.instantdb.com/docs/http-api
+  version: '1.0'
+servers:
+- url: https://api.instantdb.com
+  description: InstantDB production Admin API
+security:
+- adminToken: []
+tags:
+- name: Transactions
+  description: InstaML transaction writes.
+paths:
+  /admin/transact:
+    post:
+      operationId: adminTransact
+      tags:
+      - Transactions
+      summary: Apply InstaML transaction steps
+      description: Atomically applies an array of InstaML transaction steps (update, merge, delete, link, unlink) as an admin. Each step is a tuple of `[action, namespace, id, args]`.
+      parameters:
+      - $ref: '#/components/parameters/AppId'
+      - $ref: '#/components/parameters/AsEmail'
+      - $ref: '#/components/parameters/AsToken'
+      - $ref: '#/components/parameters/AsGuest'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - steps
+              properties:
+                steps:
+                  type: array
+                  description: Array of InstaML transaction step tuples.
+                  items:
+                    type: array
+            example:
+              steps:
+              - - update
+                - goals
+                - 8aa64e4c-64f9-472e-8a61-3fa28870e6cb
+                - title: Get fit
+      responses:
+        '200':
+          description: Transaction applied; returns transaction id.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+        '400':
+          $ref: '#/components/responses/Error'
+        '401':
+          $ref: '#/components/responses/Error'
+components:
+  parameters:
+    AppId:
+      name: App-Id
+      in: header
+      required: true
+      description: The Instant application id.
+      schema:
+        type: string
+    AsToken:
+      name: As-Token
+      in: header
+      required: false
+      description: Impersonate the user holding this refresh token.
+      schema:
+        type: string
+    AsEmail:
+      name: As-Email
+      in: header
+      required: false
+      description: Impersonate the user with this email (requires admin token).
+      schema:
+        type: string
+        format: email
+    AsGuest:
+      name: As-Guest
+      in: header
+      required: false
+      description: Run the request as an unauthenticated guest.
+      schema:
+        type: boolean
+  responses:
+    Error:
+      description: Error response.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              type:
+                type: string
+              message:
+                type: string
+            additionalProperties: true
+  securitySchemes:
+    adminToken:
+      type: http
+      scheme: bearer
+      description: 'Admin token issued in the InstantDB dashboard, sent as `Authorization: Bearer $ADMIN_TOKEN`.'

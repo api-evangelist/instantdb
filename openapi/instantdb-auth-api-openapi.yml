@@ -1,0 +1,297 @@
+openapi: 3.0.1
+info:
+  title: InstantDB Admin HTTP Auth API
+  description: HTTP Admin API for InstantDB (Instant), the realtime client-side database. The Admin API runs server-side at https://api.instantdb.com, authenticated with a Bearer admin token plus an App-Id header, and bypasses permission rules. It exposes InstaQL reads (POST /admin/query), InstaML writes (POST /admin/transact), auth (refresh tokens, magic codes, users), storage (upload, list, delete), and presence.
+  termsOfService: https://www.instantdb.com/terms
+  contact:
+    name: InstantDB Support
+    url: https://www.instantdb.com/docs/http-api
+  version: '1.0'
+servers:
+- url: https://api.instantdb.com
+  description: InstantDB production Admin API
+security:
+- adminToken: []
+tags:
+- name: Auth
+  description: Server-side authentication, tokens, and users.
+paths:
+  /admin/refresh_tokens:
+    post:
+      operationId: adminRefreshTokens
+      tags:
+      - Auth
+      summary: Create a refresh token for a user
+      description: Generates an auth (refresh) token for a user identified by email or id, creating the user if they do not already exist. Optionally set custom `$users` fields with `extra-fields`.
+      parameters:
+      - $ref: '#/components/parameters/AppId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+                id:
+                  type: string
+                extra-fields:
+                  type: object
+                  additionalProperties: true
+            example:
+              email: alyssa_p_hacker@instantdb.com
+      responses:
+        '200':
+          description: A user record with a refresh token.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+        '401':
+          $ref: '#/components/responses/Error'
+  /admin/magic_code:
+    post:
+      operationId: adminCreateMagicCode
+      tags:
+      - Auth
+      summary: Create a magic code
+      description: Creates a magic code for the given email without sending it, so you can deliver it through your own provider.
+      parameters:
+      - $ref: '#/components/parameters/AppId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - email
+              properties:
+                email:
+                  type: string
+                  format: email
+      responses:
+        '200':
+          description: The generated magic code.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+  /admin/send_magic_code:
+    post:
+      operationId: adminSendMagicCode
+      tags:
+      - Auth
+      summary: Create and send a magic code
+      description: Creates a magic code and sends it to the email via Instant's provider.
+      parameters:
+      - $ref: '#/components/parameters/AppId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - email
+              properties:
+                email:
+                  type: string
+                  format: email
+      responses:
+        '200':
+          description: Magic code sent.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+  /admin/verify_magic_code:
+    post:
+      operationId: adminVerifyMagicCode
+      tags:
+      - Auth
+      summary: Verify a magic code
+      description: Verifies a magic code for an email and returns the user, creating it if needed. Optionally set custom `$users` fields with `extra-fields`.
+      parameters:
+      - $ref: '#/components/parameters/AppId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - email
+              - code
+              properties:
+                email:
+                  type: string
+                  format: email
+                code:
+                  type: string
+                extra-fields:
+                  type: object
+                  additionalProperties: true
+      responses:
+        '200':
+          description: The verified user with a refresh token.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+  /admin/users:
+    get:
+      operationId: adminGetUser
+      tags:
+      - Auth
+      summary: Look up a user
+      description: Fetches an app user by email, id, or refresh_token.
+      parameters:
+      - $ref: '#/components/parameters/AppId'
+      - name: email
+        in: query
+        schema:
+          type: string
+          format: email
+      - name: id
+        in: query
+        schema:
+          type: string
+      - name: refresh_token
+        in: query
+        schema:
+          type: string
+      responses:
+        '200':
+          description: The matching user.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+        '404':
+          $ref: '#/components/responses/Error'
+    delete:
+      operationId: adminDeleteUser
+      tags:
+      - Auth
+      summary: Delete a user
+      description: Permanently deletes an app user by email, id, or refresh_token.
+      parameters:
+      - $ref: '#/components/parameters/AppId'
+      - name: email
+        in: query
+        schema:
+          type: string
+          format: email
+      - name: id
+        in: query
+        schema:
+          type: string
+      - name: refresh_token
+        in: query
+        schema:
+          type: string
+      responses:
+        '200':
+          description: The deleted user.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+  /admin/sign_out:
+    post:
+      operationId: adminSignOut
+      tags:
+      - Auth
+      summary: Sign a user out
+      description: Invalidates a user's sessions / refresh tokens. Identify the user by email, id, or refresh_token.
+      parameters:
+      - $ref: '#/components/parameters/AppId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+                id:
+                  type: string
+                refresh_token:
+                  type: string
+      responses:
+        '200':
+          description: Sign-out succeeded.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+  /runtime/auth/verify_refresh_token:
+    post:
+      operationId: verifyRefreshToken
+      tags:
+      - Auth
+      summary: Verify a refresh token
+      description: Validates a refresh token for an app and returns the associated user.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - app-id
+              - refresh-token
+              properties:
+                app-id:
+                  type: string
+                refresh-token:
+                  type: string
+      responses:
+        '200':
+          description: The user associated with the refresh token.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+        '401':
+          $ref: '#/components/responses/Error'
+components:
+  responses:
+    Error:
+      description: Error response.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              type:
+                type: string
+              message:
+                type: string
+            additionalProperties: true
+  parameters:
+    AppId:
+      name: App-Id
+      in: header
+      required: true
+      description: The Instant application id.
+      schema:
+        type: string
+  securitySchemes:
+    adminToken:
+      type: http
+      scheme: bearer
+      description: 'Admin token issued in the InstantDB dashboard, sent as `Authorization: Bearer $ADMIN_TOKEN`.'

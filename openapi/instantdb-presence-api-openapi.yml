@@ -1,0 +1,59 @@
+openapi: 3.0.1
+info:
+  title: InstantDB Admin HTTP Auth Presence API
+  description: HTTP Admin API for InstantDB (Instant), the realtime client-side database. The Admin API runs server-side at https://api.instantdb.com, authenticated with a Bearer admin token plus an App-Id header, and bypasses permission rules. It exposes InstaQL reads (POST /admin/query), InstaML writes (POST /admin/transact), auth (refresh tokens, magic codes, users), storage (upload, list, delete), and presence.
+  termsOfService: https://www.instantdb.com/terms
+  contact:
+    name: InstantDB Support
+    url: https://www.instantdb.com/docs/http-api
+  version: '1.0'
+servers:
+- url: https://api.instantdb.com
+  description: InstantDB production Admin API
+security:
+- adminToken: []
+tags:
+- name: Presence
+  description: Room presence lookups.
+paths:
+  /admin/rooms/presence:
+    get:
+      operationId: adminRoomPresence
+      tags:
+      - Presence
+      summary: Get room presence
+      description: Returns the users currently present in a realtime room, identified by room-type and room-id.
+      parameters:
+      - $ref: '#/components/parameters/AppId'
+      - name: room-type
+        in: query
+        required: true
+        schema:
+          type: string
+      - name: room-id
+        in: query
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Current presence for the room.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+components:
+  parameters:
+    AppId:
+      name: App-Id
+      in: header
+      required: true
+      description: The Instant application id.
+      schema:
+        type: string
+  securitySchemes:
+    adminToken:
+      type: http
+      scheme: bearer
+      description: 'Admin token issued in the InstantDB dashboard, sent as `Authorization: Bearer $ADMIN_TOKEN`.'

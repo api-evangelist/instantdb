@@ -1,0 +1,112 @@
+openapi: 3.0.1
+info:
+  title: InstantDB Admin HTTP Auth Query API
+  description: HTTP Admin API for InstantDB (Instant), the realtime client-side database. The Admin API runs server-side at https://api.instantdb.com, authenticated with a Bearer admin token plus an App-Id header, and bypasses permission rules. It exposes InstaQL reads (POST /admin/query), InstaML writes (POST /admin/transact), auth (refresh tokens, magic codes, users), storage (upload, list, delete), and presence.
+  termsOfService: https://www.instantdb.com/terms
+  contact:
+    name: InstantDB Support
+    url: https://www.instantdb.com/docs/http-api
+  version: '1.0'
+servers:
+- url: https://api.instantdb.com
+  description: InstantDB production Admin API
+security:
+- adminToken: []
+tags:
+- name: Query
+  description: InstaQL read queries.
+paths:
+  /admin/query:
+    post:
+      operationId: adminQuery
+      tags:
+      - Query
+      summary: Run an InstaQL query
+      description: Executes an InstaQL read query as an admin (bypassing permissions) and returns matching, nested entities. Pass `$$ruleParams` to provide values referenced by permission rules. Querying the `$files` namespace lists storage files.
+      parameters:
+      - $ref: '#/components/parameters/AppId'
+      - $ref: '#/components/parameters/AsEmail'
+      - $ref: '#/components/parameters/AsToken'
+      - $ref: '#/components/parameters/AsGuest'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - query
+              properties:
+                query:
+                  type: object
+                  description: An InstaQL query object.
+                  additionalProperties: true
+                $$ruleParams:
+                  type: object
+                  description: Optional values referenced by permission rules.
+                  additionalProperties: true
+            example:
+              query:
+                goals:
+                  todos: {}
+      responses:
+        '200':
+          description: Query result with nested entities.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+        '400':
+          $ref: '#/components/responses/Error'
+        '401':
+          $ref: '#/components/responses/Error'
+components:
+  parameters:
+    AppId:
+      name: App-Id
+      in: header
+      required: true
+      description: The Instant application id.
+      schema:
+        type: string
+    AsToken:
+      name: As-Token
+      in: header
+      required: false
+      description: Impersonate the user holding this refresh token.
+      schema:
+        type: string
+    AsEmail:
+      name: As-Email
+      in: header
+      required: false
+      description: Impersonate the user with this email (requires admin token).
+      schema:
+        type: string
+        format: email
+    AsGuest:
+      name: As-Guest
+      in: header
+      required: false
+      description: Run the request as an unauthenticated guest.
+      schema:
+        type: boolean
+  responses:
+    Error:
+      description: Error response.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              type:
+                type: string
+              message:
+                type: string
+            additionalProperties: true
+  securitySchemes:
+    adminToken:
+      type: http
+      scheme: bearer
+      description: 'Admin token issued in the InstantDB dashboard, sent as `Authorization: Bearer $ADMIN_TOKEN`.'

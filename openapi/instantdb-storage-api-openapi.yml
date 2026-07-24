@@ -1,0 +1,119 @@
+openapi: 3.0.1
+info:
+  title: InstantDB Admin HTTP Auth Storage API
+  description: HTTP Admin API for InstantDB (Instant), the realtime client-side database. The Admin API runs server-side at https://api.instantdb.com, authenticated with a Bearer admin token plus an App-Id header, and bypasses permission rules. It exposes InstaQL reads (POST /admin/query), InstaML writes (POST /admin/transact), auth (refresh tokens, magic codes, users), storage (upload, list, delete), and presence.
+  termsOfService: https://www.instantdb.com/terms
+  contact:
+    name: InstantDB Support
+    url: https://www.instantdb.com/docs/http-api
+  version: '1.0'
+servers:
+- url: https://api.instantdb.com
+  description: InstantDB production Admin API
+security:
+- adminToken: []
+tags:
+- name: Storage
+  description: File upload, listing, and deletion.
+paths:
+  /admin/storage/upload:
+    put:
+      operationId: adminStorageUpload
+      tags:
+      - Storage
+      summary: Upload a file
+      description: Uploads a file to Instant storage. Supply the destination via the `Path` header and the appropriate `Content-Type`; the request body is the raw binary file content.
+      parameters:
+      - $ref: '#/components/parameters/AppId'
+      - name: Path
+        in: header
+        required: true
+        description: Destination path for the uploaded file.
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/octet-stream:
+            schema:
+              type: string
+              format: binary
+      responses:
+        '200':
+          description: The created file record.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+  /admin/storage/files:
+    delete:
+      operationId: adminStorageDeleteFile
+      tags:
+      - Storage
+      summary: Delete a single file
+      description: Deletes one file by its storage path.
+      parameters:
+      - $ref: '#/components/parameters/AppId'
+      - name: filename
+        in: query
+        required: true
+        description: The storage path of the file to delete.
+        schema:
+          type: string
+      responses:
+        '200':
+          description: File deleted.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+  /admin/storage/files/delete:
+    post:
+      operationId: adminStorageDeleteFiles
+      tags:
+      - Storage
+      summary: Delete multiple files
+      description: Deletes multiple files in one request by their storage paths.
+      parameters:
+      - $ref: '#/components/parameters/AppId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - filenames
+              properties:
+                filenames:
+                  type: array
+                  items:
+                    type: string
+            example:
+              filenames:
+              - images/cat.png
+              - docs/readme.txt
+      responses:
+        '200':
+          description: Files deleted.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+components:
+  parameters:
+    AppId:
+      name: App-Id
+      in: header
+      required: true
+      description: The Instant application id.
+      schema:
+        type: string
+  securitySchemes:
+    adminToken:
+      type: http
+      scheme: bearer
+      description: 'Admin token issued in the InstantDB dashboard, sent as `Authorization: Bearer $ADMIN_TOKEN`.'
