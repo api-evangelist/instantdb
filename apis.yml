@@ -7,7 +7,20 @@ description: InstantDB (Instant) is a realtime client-side database and Firebase
   optimistic updates by default. It exposes an HTTP Admin API (api.instantdb.com)
   for server-side InstaQL queries and InstaML transactions, plus auth, storage,
   presence, and a realtime WebSocket sync layer.
-image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+accessModel:
+  pricing: freemium
+  onboarding: self-serve
+  trial: false
+  try_now: true
+  public: false
+  label: Freemium · Self-serve signup
+  confidence: high
+  source:
+  - plans
+  - authentication
+  generated: '2026-07-22'
+  method: derived
+image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/instantdb.png
 tags:
 - Database
 - Realtime
@@ -18,111 +31,6 @@ created: '2026-06-20'
 modified: '2026-06-20'
 specificationVersion: '0.19'
 apis:
-- aid: instantdb:instantdb-admin-http-api
-  name: InstantDB Admin HTTP API
-  tags:
-  - Admin
-  - HTTP
-  - Backend
-  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
-  humanURL: https://www.instantdb.com/docs/http-api
-  baseURL: https://api.instantdb.com
-  properties:
-  - url: https://www.instantdb.com/docs/http-api
-    type: Documentation
-  - url: https://www.instantdb.com/docs/http-api
-    type: APIReference
-  - url: openapi/instantdb-openapi.yml
-    type: OpenAPI
-  - url: collections/instantdb.postman_collection.json
-    type: Postman
-  description: Server-side HTTP Admin API at api.instantdb.com, authenticated with
-    a Bearer admin token and an App-Id header, that bypasses permissions to run
-    InstaQL queries, InstaML transactions, auth, storage, and presence operations.
-- aid: instantdb:instantdb-query-instaql-api
-  name: InstantDB Query (InstaQL) API
-  tags:
-  - Query
-  - InstaQL
-  - Read
-  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
-  humanURL: https://www.instantdb.com/docs/instaql
-  baseURL: https://api.instantdb.com
-  properties:
-  - url: https://www.instantdb.com/docs/instaql
-    type: Documentation
-  - url: https://www.instantdb.com/docs/http-api
-    type: APIReference
-  - url: openapi/instantdb-openapi.yml
-    type: OpenAPI
-  - url: collections/instantdb.postman_collection.json
-    type: Postman
-  description: Reads data with InstaQL, Instant's relational GraphQL-like query
-    language, via POST /admin/query - returning nested entities in a single
-    round trip with optional rule parameters.
-- aid: instantdb:instantdb-transactions-instaml-api
-  name: InstantDB Transactions (InstaML) API
-  tags:
-  - Transactions
-  - InstaML
-  - Write
-  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
-  humanURL: https://www.instantdb.com/docs/instaml
-  baseURL: https://api.instantdb.com
-  properties:
-  - url: https://www.instantdb.com/docs/instaml
-    type: Documentation
-  - url: https://www.instantdb.com/docs/http-api
-    type: APIReference
-  - url: openapi/instantdb-openapi.yml
-    type: OpenAPI
-  - url: collections/instantdb.postman_collection.json
-    type: Postman
-  description: Writes, updates, links, and deletes data with InstaML transaction
-    steps via POST /admin/transact, applied atomically as an admin that bypasses
-    permission rules.
-- aid: instantdb:instantdb-auth-api
-  name: InstantDB Auth API
-  tags:
-  - Auth
-  - Tokens
-  - Magic Code
-  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
-  humanURL: https://www.instantdb.com/docs/auth
-  baseURL: https://api.instantdb.com
-  properties:
-  - url: https://www.instantdb.com/docs/auth
-    type: Documentation
-  - url: https://www.instantdb.com/docs/http-api
-    type: APIReference
-  - url: openapi/instantdb-openapi.yml
-    type: OpenAPI
-  - url: collections/instantdb.postman_collection.json
-    type: Postman
-  description: Server-side auth - mint refresh tokens, create/send/verify magic
-    codes, look up and delete users, and sign users out - over /admin/refresh_tokens,
-    /admin/magic_code, /admin/users, and related endpoints.
-- aid: instantdb:instantdb-storage-api
-  name: InstantDB Storage API
-  tags:
-  - Storage
-  - Files
-  - Uploads
-  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
-  humanURL: https://www.instantdb.com/docs/storage
-  baseURL: https://api.instantdb.com
-  properties:
-  - url: https://www.instantdb.com/docs/storage
-    type: Documentation
-  - url: https://www.instantdb.com/docs/http-api
-    type: APIReference
-  - url: openapi/instantdb-openapi.yml
-    type: OpenAPI
-  - url: collections/instantdb.postman_collection.json
-    type: Postman
-  description: Uploads, lists, and deletes files in Instant's object storage via
-    PUT /admin/storage/upload, the $files query namespace, and the storage delete
-    endpoints, with files surfaced as first-class entities.
 - aid: instantdb:instantdb-realtime-sync-api
   name: InstantDB Realtime Sync API
   tags:
@@ -140,10 +48,130 @@ apis:
     type: APIReference
   - url: asyncapi/instantdb-asyncapi.yml
     type: AsyncAPI
-  description: The realtime sync transport - a persistent WebSocket at
-    wss://api.instantdb.com/runtime/session over which the client Reactor sends
-    init, add-query, transact, and presence ops and the server streams query
-    novelty (refresh-ok), presence, and broadcasts back to subscribers.
+  description: >-
+    The realtime sync transport - a persistent WebSocket at wss://api.instantdb.com/runtime/session over
+    which the client Reactor sends init, add-query, transact, and presence ops and the server streams
+    query novelty (refresh-ok), presence, and broadcasts back to subscribers.
+- aid: instantdb:instantdb-auth-api
+  name: InstantDB Auth API
+  description: Server-side authentication, tokens, and users.
+  humanURL: https://www.instantdb.com/docs/http-api
+  baseURL: https://api.instantdb.com
+  tags:
+  - Auth
+  properties:
+  - type: OpenAPI
+    url: openapi/instantdb-auth-api-openapi.yml
+  - type: Documentation
+    url: https://www.instantdb.com/docs/http-api
+  - type: APIReference
+    url: https://www.instantdb.com/docs/http-api
+  - type: Postman
+    url: collections/instantdb.postman_collection.json
+  - type: Documentation
+    url: https://www.instantdb.com/docs/instaql
+  - type: Documentation
+    url: https://www.instantdb.com/docs/instaml
+  - type: Documentation
+    url: https://www.instantdb.com/docs/auth
+  - type: Documentation
+    url: https://www.instantdb.com/docs/storage
+- aid: instantdb:instantdb-presence-api
+  name: InstantDB Presence API
+  description: Room presence lookups.
+  humanURL: https://www.instantdb.com/docs/http-api
+  baseURL: https://api.instantdb.com
+  tags:
+  - Presence
+  properties:
+  - type: OpenAPI
+    url: openapi/instantdb-presence-api-openapi.yml
+  - type: Documentation
+    url: https://www.instantdb.com/docs/http-api
+  - type: APIReference
+    url: https://www.instantdb.com/docs/http-api
+  - type: Postman
+    url: collections/instantdb.postman_collection.json
+  - type: Documentation
+    url: https://www.instantdb.com/docs/instaql
+  - type: Documentation
+    url: https://www.instantdb.com/docs/instaml
+  - type: Documentation
+    url: https://www.instantdb.com/docs/auth
+  - type: Documentation
+    url: https://www.instantdb.com/docs/storage
+- aid: instantdb:instantdb-query-api
+  name: InstantDB Query API
+  description: InstaQL read queries.
+  humanURL: https://www.instantdb.com/docs/http-api
+  baseURL: https://api.instantdb.com
+  tags:
+  - Query
+  properties:
+  - type: OpenAPI
+    url: openapi/instantdb-query-api-openapi.yml
+  - type: Documentation
+    url: https://www.instantdb.com/docs/http-api
+  - type: APIReference
+    url: https://www.instantdb.com/docs/http-api
+  - type: Postman
+    url: collections/instantdb.postman_collection.json
+  - type: Documentation
+    url: https://www.instantdb.com/docs/instaql
+  - type: Documentation
+    url: https://www.instantdb.com/docs/instaml
+  - type: Documentation
+    url: https://www.instantdb.com/docs/auth
+  - type: Documentation
+    url: https://www.instantdb.com/docs/storage
+- aid: instantdb:instantdb-storage-api
+  name: InstantDB Storage API
+  description: File upload, listing, and deletion.
+  humanURL: https://www.instantdb.com/docs/http-api
+  baseURL: https://api.instantdb.com
+  tags:
+  - Storage
+  properties:
+  - type: OpenAPI
+    url: openapi/instantdb-storage-api-openapi.yml
+  - type: Documentation
+    url: https://www.instantdb.com/docs/http-api
+  - type: APIReference
+    url: https://www.instantdb.com/docs/http-api
+  - type: Postman
+    url: collections/instantdb.postman_collection.json
+  - type: Documentation
+    url: https://www.instantdb.com/docs/instaql
+  - type: Documentation
+    url: https://www.instantdb.com/docs/instaml
+  - type: Documentation
+    url: https://www.instantdb.com/docs/auth
+  - type: Documentation
+    url: https://www.instantdb.com/docs/storage
+- aid: instantdb:instantdb-transactions-api
+  name: InstantDB Transactions API
+  description: InstaML transaction writes.
+  humanURL: https://www.instantdb.com/docs/http-api
+  baseURL: https://api.instantdb.com
+  tags:
+  - Transactions
+  properties:
+  - type: OpenAPI
+    url: openapi/instantdb-transactions-api-openapi.yml
+  - type: Documentation
+    url: https://www.instantdb.com/docs/http-api
+  - type: APIReference
+    url: https://www.instantdb.com/docs/http-api
+  - type: Postman
+    url: collections/instantdb.postman_collection.json
+  - type: Documentation
+    url: https://www.instantdb.com/docs/instaql
+  - type: Documentation
+    url: https://www.instantdb.com/docs/instaml
+  - type: Documentation
+    url: https://www.instantdb.com/docs/auth
+  - type: Documentation
+    url: https://www.instantdb.com/docs/storage
 common:
 - type: AgenticAccess
   url: agentic-access/instantdb-agentic-access.yml
