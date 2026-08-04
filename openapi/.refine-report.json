@@ -1,0 +1,22 @@
+{
+  "provider": "instantdb",
+  "sources": [
+    "instantdb-auth-api-openapi.yml",
+    "instantdb-presence-api-openapi.yml",
+    "instantdb-query-api-openapi.yml",
+    "instantdb-storage-api-openapi.yml",
+    "instantdb-transactions-api-openapi.yml"
+  ],
+  "outputs": [
+    "instantdb-auth-api-openapi.yml",
+    "instantdb-presence-api-openapi.yml",
+    "instantdb-query-api-openapi.yml",
+    "instantdb-storage-api-openapi.yml",
+    "instantdb-transactions-api-openapi.yml"
+  ],
+  "archived": [],
+  "errors": [],
+  "warnings": [],
+  "notes": [],
+  "skipped": []
+}
