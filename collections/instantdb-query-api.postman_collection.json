@@ -1,0 +1,342 @@
+{
+  "item": [
+    {
+      "id": "1cb6d001-12bf-4fff-97ea-0694f1dcdd52",
+      "name": "Query",
+      "description": {
+        "content": "InstaQL read queries.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "18b1460c-af42-41fc-87f3-5118402e8ed1",
+          "name": "Run an InstaQL query",
+          "request": {
+            "name": "Run an InstaQL query",
+            "description": {
+              "content": "Executes an InstaQL read query as an admin (bypassing permissions) and returns matching, nested entities. Pass `$$ruleParams` to provide values referenced by permission rules. Querying the `$files` namespace lists storage files.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "admin",
+                "query"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "(Required) The Instant application id.",
+                "key": "App-Id",
+                "value": "<string>"
+              },
+              {
+                "disabled": false,
+                "description": "Impersonate the user with this email (requires admin token).",
+                "key": "As-Email",
+                "value": "<email>"
+              },
+              {
+                "disabled": false,
+                "description": "Impersonate the user holding this refresh token.",
+                "key": "As-Token",
+                "value": "<string>"
+              },
+              {
+                "disabled": false,
+                "description": "Run the request as an unauthenticated guest.",
+                "key": "As-Guest",
+                "value": "<boolean>"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"query\": {\n    \"key_0\": true\n  },\n  \"$$ruleParams\": {\n    \"key_0\": true\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "8d4f8802-a47a-4c1d-804c-d2d596ad0e41",
+              "name": "Query result with nested entities.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "admin",
+                    "query"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) The Instant application id.",
+                    "key": "App-Id",
+                    "value": "<string>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Impersonate the user with this email (requires admin token).",
+                    "key": "As-Email",
+                    "value": "<email>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Impersonate the user holding this refresh token.",
+                    "key": "As-Token",
+                    "value": "<string>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Run the request as an unauthenticated guest.",
+                    "key": "As-Guest",
+                    "value": "<boolean>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"query\": {\n    \"goals\": {\n      \"todos\": {}\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"key_0\": true,\n  \"key_1\": false\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "0f1a7fa9-f6ae-4d29-9a0c-2db85326db38",
+              "name": "Error response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "admin",
+                    "query"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) The Instant application id.",
+                    "key": "App-Id",
+                    "value": "<string>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Impersonate the user with this email (requires admin token).",
+                    "key": "As-Email",
+                    "value": "<email>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Impersonate the user holding this refresh token.",
+                    "key": "As-Token",
+                    "value": "<string>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Run the request as an unauthenticated guest.",
+                    "key": "As-Guest",
+                    "value": "<boolean>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"query\": {\n    \"goals\": {\n      \"todos\": {}\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"type\": \"string\",\n  \"message\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "dc4e4e06-4566-4d59-b051-93f3288889fa",
+              "name": "Error response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "admin",
+                    "query"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) The Instant application id.",
+                    "key": "App-Id",
+                    "value": "<string>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Impersonate the user with this email (requires admin token).",
+                    "key": "As-Email",
+                    "value": "<email>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Impersonate the user holding this refresh token.",
+                    "key": "As-Token",
+                    "value": "<string>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Run the request as an unauthenticated guest.",
+                    "key": "As-Guest",
+                    "value": "<boolean>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"query\": {\n    \"goals\": {\n      \"todos\": {}\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"type\": \"string\",\n  \"message\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.instantdb.com",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "8117a214-da35-437e-a57b-36d6efd72bbf",
+    "name": "InstantDB Admin HTTP Auth Query API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "HTTP Admin API for InstantDB (Instant), the realtime client-side database. The Admin API runs server-side at https://api.instantdb.com, authenticated with a Bearer admin token plus an App-Id header, and bypasses permission rules. It exposes InstaQL reads (POST /admin/query), InstaML writes (POST /admin/transact), auth (refresh tokens, magic codes, users), storage (upload, list, delete), and presence.\n\nContact Support:\n Name: InstantDB Support",
+      "type": "text/plain"
+    }
+  }
+}

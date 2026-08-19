@@ -1,0 +1,157 @@
+{
+  "item": [
+    {
+      "id": "41702c27-3a3d-4b04-a5b8-c0b4bc562267",
+      "name": "Presence",
+      "description": {
+        "content": "Room presence lookups.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "3145328c-a0c0-47c9-978c-36b2394b5452",
+          "name": "Get room presence",
+          "request": {
+            "name": "Get room presence",
+            "description": {
+              "content": "Returns the users currently present in a realtime room, identified by room-type and room-id.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "admin",
+                "rooms",
+                "presence"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "room-type",
+                  "value": "<string>",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "room-id",
+                  "value": "<string>",
+                  "description": "(Required) "
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "(Required) The Instant application id.",
+                "key": "App-Id",
+                "value": "<string>"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "7cc8ba2a-3813-458e-918f-238d139c195e",
+              "name": "Current presence for the room.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "admin",
+                    "rooms",
+                    "presence"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "room-type",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "room-id",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) The Instant application id.",
+                    "key": "App-Id",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"key_0\": 3801.16632754115\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.instantdb.com",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "12330939-47ae-4f3e-81bf-e216226454f2",
+    "name": "InstantDB Admin HTTP Auth Presence API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "HTTP Admin API for InstantDB (Instant), the realtime client-side database. The Admin API runs server-side at https://api.instantdb.com, authenticated with a Bearer admin token plus an App-Id header, and bypasses permission rules. It exposes InstaQL reads (POST /admin/query), InstaML writes (POST /admin/transact), auth (refresh tokens, magic codes, users), storage (upload, list, delete), and presence.\n\nContact Support:\n Name: InstantDB Support",
+      "type": "text/plain"
+    }
+  }
+}

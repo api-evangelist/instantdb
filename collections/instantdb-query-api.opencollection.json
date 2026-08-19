@@ -1,0 +1,57 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "InstantDB Admin HTTP Auth Query API",
+    "version": "1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Query",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Run an InstaQL query",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.instantdb.com/admin/query",
+            "headers": [
+              {
+                "name": "App-Id",
+                "value": ""
+              },
+              {
+                "name": "As-Email",
+                "value": ""
+              },
+              {
+                "name": "As-Token",
+                "value": ""
+              },
+              {
+                "name": "As-Guest",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Executes an InstaQL read query as an admin (bypassing permissions) and returns matching, nested entities. Pass `$$ruleParams` to provide values referenced by permission rules. Querying the `$files` namespace lists storage files."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

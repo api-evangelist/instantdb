@@ -1,0 +1,53 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "InstantDB Admin HTTP Auth Presence API",
+    "version": "1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Presence",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get room presence",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.instantdb.com/admin/rooms/presence",
+            "headers": [
+              {
+                "name": "App-Id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "room-type",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "room-id",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "Returns the users currently present in a realtime room, identified by room-type and room-id."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

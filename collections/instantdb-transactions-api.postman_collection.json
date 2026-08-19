@@ -1,0 +1,342 @@
+{
+  "item": [
+    {
+      "id": "c4cc499c-e8f5-4ecb-bfc8-f73758e6218b",
+      "name": "Transactions",
+      "description": {
+        "content": "InstaML transaction writes.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "594ccbc5-a50e-4870-9b42-ff32d536ba18",
+          "name": "Apply InstaML transaction steps",
+          "request": {
+            "name": "Apply InstaML transaction steps",
+            "description": {
+              "content": "Atomically applies an array of InstaML transaction steps (update, merge, delete, link, unlink) as an admin. Each step is a tuple of `[action, namespace, id, args]`.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "admin",
+                "transact"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "(Required) The Instant application id.",
+                "key": "App-Id",
+                "value": "<string>"
+              },
+              {
+                "disabled": false,
+                "description": "Impersonate the user with this email (requires admin token).",
+                "key": "As-Email",
+                "value": "<email>"
+              },
+              {
+                "disabled": false,
+                "description": "Impersonate the user holding this refresh token.",
+                "key": "As-Token",
+                "value": "<string>"
+              },
+              {
+                "disabled": false,
+                "description": "Run the request as an unauthenticated guest.",
+                "key": "As-Guest",
+                "value": "<boolean>"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"steps\": [\n    \"<array>\",\n    \"<array>\"\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "9fd1110b-a2cd-4a48-b128-48417fd67a33",
+              "name": "Transaction applied; returns transaction id.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "admin",
+                    "transact"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) The Instant application id.",
+                    "key": "App-Id",
+                    "value": "<string>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Impersonate the user with this email (requires admin token).",
+                    "key": "As-Email",
+                    "value": "<email>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Impersonate the user holding this refresh token.",
+                    "key": "As-Token",
+                    "value": "<string>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Run the request as an unauthenticated guest.",
+                    "key": "As-Guest",
+                    "value": "<boolean>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"steps\": [\n    [\n      \"update\",\n      \"goals\",\n      \"8aa64e4c-64f9-472e-8a61-3fa28870e6cb\",\n      {\n        \"title\": \"Get fit\"\n      }\n    ]\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"key_0\": \"string\",\n  \"key_1\": 8798.490111197087\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "b0e13cd1-c240-4200-9387-ddae26f9a9c4",
+              "name": "Error response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "admin",
+                    "transact"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) The Instant application id.",
+                    "key": "App-Id",
+                    "value": "<string>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Impersonate the user with this email (requires admin token).",
+                    "key": "As-Email",
+                    "value": "<email>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Impersonate the user holding this refresh token.",
+                    "key": "As-Token",
+                    "value": "<string>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Run the request as an unauthenticated guest.",
+                    "key": "As-Guest",
+                    "value": "<boolean>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"steps\": [\n    [\n      \"update\",\n      \"goals\",\n      \"8aa64e4c-64f9-472e-8a61-3fa28870e6cb\",\n      {\n        \"title\": \"Get fit\"\n      }\n    ]\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"type\": \"string\",\n  \"message\": \"string\",\n  \"key_0\": false\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "68e76968-becc-4599-a1e7-57102209d342",
+              "name": "Error response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "admin",
+                    "transact"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) The Instant application id.",
+                    "key": "App-Id",
+                    "value": "<string>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Impersonate the user with this email (requires admin token).",
+                    "key": "As-Email",
+                    "value": "<email>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Impersonate the user holding this refresh token.",
+                    "key": "As-Token",
+                    "value": "<string>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Run the request as an unauthenticated guest.",
+                    "key": "As-Guest",
+                    "value": "<boolean>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"steps\": [\n    [\n      \"update\",\n      \"goals\",\n      \"8aa64e4c-64f9-472e-8a61-3fa28870e6cb\",\n      {\n        \"title\": \"Get fit\"\n      }\n    ]\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"type\": \"string\",\n  \"message\": \"string\",\n  \"key_0\": false\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.instantdb.com",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "82ce4944-2f79-4252-b13a-a1b0c1d3ef87",
+    "name": "InstantDB Admin HTTP Auth Transactions API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "HTTP Admin API for InstantDB (Instant), the realtime client-side database. The Admin API runs server-side at https://api.instantdb.com, authenticated with a Bearer admin token plus an App-Id header, and bypasses permission rules. It exposes InstaQL reads (POST /admin/query), InstaML writes (POST /admin/transact), auth (refresh tokens, magic codes, users), storage (upload, list, delete), and presence.\n\nContact Support:\n Name: InstantDB Support",
+      "type": "text/plain"
+    }
+  }
+}

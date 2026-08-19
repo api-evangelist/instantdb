@@ -1,0 +1,57 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "InstantDB Admin HTTP Auth Transactions API",
+    "version": "1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Transactions",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Apply InstaML transaction steps",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.instantdb.com/admin/transact",
+            "headers": [
+              {
+                "name": "App-Id",
+                "value": ""
+              },
+              {
+                "name": "As-Email",
+                "value": ""
+              },
+              {
+                "name": "As-Token",
+                "value": ""
+              },
+              {
+                "name": "As-Guest",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Atomically applies an array of InstaML transaction steps (update, merge, delete, link, unlink) as an admin. Each step is a tuple of `[action, namespace, id, args]`."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

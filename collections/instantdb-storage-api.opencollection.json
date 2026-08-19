@@ -1,0 +1,91 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "InstantDB Admin HTTP Auth Storage API",
+    "version": "1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Storage",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Upload a file",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api.instantdb.com/admin/storage/upload",
+            "headers": [
+              {
+                "name": "App-Id",
+                "value": ""
+              },
+              {
+                "name": "Path",
+                "value": ""
+              }
+            ]
+          },
+          "docs": "Uploads a file to Instant storage. Supply the destination via the `Path` header and the appropriate `Content-Type`; the request body is the raw binary file content."
+        },
+        {
+          "info": {
+            "name": "Delete a single file",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.instantdb.com/admin/storage/files",
+            "headers": [
+              {
+                "name": "App-Id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "filename",
+                "value": "",
+                "type": "query",
+                "description": "The storage path of the file to delete."
+              }
+            ]
+          },
+          "docs": "Deletes one file by its storage path."
+        },
+        {
+          "info": {
+            "name": "Delete multiple files",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.instantdb.com/admin/storage/files/delete",
+            "headers": [
+              {
+                "name": "App-Id",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Deletes multiple files in one request by their storage paths."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}
