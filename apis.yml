@@ -23,6 +23,12 @@ accessModel:
 image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/instantdb.png
 tags:
 - Database
+- Real-Time
+- Sync
+- Backend
+- Local-First
+tags_raw:
+- Database
 - Realtime
 - Sync
 - Backend
@@ -34,6 +40,11 @@ apis:
 - aid: instantdb:instantdb-realtime-sync-api
   name: InstantDB Realtime Sync API
   tags:
+  - Real-Time
+  - WebSocket
+  - Sync
+  - Presence
+  tags_raw:
   - Realtime
   - WebSocket
   - Sync
@@ -58,6 +69,8 @@ apis:
   humanURL: https://www.instantdb.com/docs/http-api
   baseURL: https://api.instantdb.com
   tags:
+  - Authentication
+  tags_raw:
   - Auth
   properties:
   - type: OpenAPI
@@ -154,6 +167,8 @@ apis:
   humanURL: https://www.instantdb.com/docs/http-api
   baseURL: https://api.instantdb.com
   tags:
+  - Transaction
+  tags_raw:
   - Transactions
   properties:
   - type: OpenAPI
