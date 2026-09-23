@@ -1,11 +1,7 @@
 {
   "provider": "instantdb",
   "sources": [
-    "instantdb-auth-api-openapi.yml",
-    "instantdb-presence-api-openapi.yml",
-    "instantdb-query-api-openapi.yml",
-    "instantdb-storage-api-openapi.yml",
-    "instantdb-transactions-api-openapi.yml"
+    "_original/instantdb-openapi.yml"
   ],
   "outputs": [
     "instantdb-auth-api-openapi.yml",
@@ -17,6 +13,16 @@
   "archived": [],
   "errors": [],
   "warnings": [],
-  "notes": [],
-  "skipped": []
+  "notes": [
+    "sourced from openapi/_original/ (1 archived document(s)); previously refined output at the top level was skipped rather than re-split",
+    "instantdb-openapi.yml: upgraded openapi 3.0.1 -> OpenAPI 3.2.0",
+    "apis.yml register: already-registered"
+  ],
+  "skipped": [
+    "instantdb-auth-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "instantdb-presence-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "instantdb-query-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "instantdb-storage-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "instantdb-transactions-api-openapi.yml: previously refined output, superseded by openapi/_original/"
+  ]
 }
