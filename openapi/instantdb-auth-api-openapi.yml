@@ -269,6 +269,14 @@ paths:
         '401':
           $ref: '#/components/responses/Error'
 components:
+  parameters:
+    AppId:
+      name: App-Id
+      in: header
+      required: true
+      description: The Instant application id.
+      schema:
+        type: string
   responses:
     Error:
       description: Error response.
@@ -282,14 +290,6 @@ components:
               message:
                 type: string
             additionalProperties: true
-  parameters:
-    AppId:
-      name: App-Id
-      in: header
-      required: true
-      description: The Instant application id.
-      schema:
-        type: string
   securitySchemes:
     adminToken:
       type: http

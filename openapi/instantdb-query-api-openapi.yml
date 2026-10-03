@@ -63,13 +63,6 @@ paths:
           $ref: '#/components/responses/Error'
 components:
   parameters:
-    AsToken:
-      name: As-Token
-      in: header
-      required: false
-      description: Impersonate the user holding this refresh token.
-      schema:
-        type: string
     AsEmail:
       name: As-Email
       in: header
@@ -78,13 +71,6 @@ components:
       schema:
         type: string
         format: email
-    AsGuest:
-      name: As-Guest
-      in: header
-      required: false
-      description: Run the request as an unauthenticated guest.
-      schema:
-        type: boolean
     AppId:
       name: App-Id
       in: header
@@ -92,6 +78,20 @@ components:
       description: The Instant application id.
       schema:
         type: string
+    AsToken:
+      name: As-Token
+      in: header
+      required: false
+      description: Impersonate the user holding this refresh token.
+      schema:
+        type: string
+    AsGuest:
+      name: As-Guest
+      in: header
+      required: false
+      description: Run the request as an unauthenticated guest.
+      schema:
+        type: boolean
   responses:
     Error:
       description: Error response.
