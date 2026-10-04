@@ -1,0 +1,25 @@
+slug: instantdb
+provider: InstantDB
+generated_by: planning/capability-mapping/scripts/classify_capabilities.py
+model: claude-opus-5
+frame:
+- Software & Technology
+min_confidence: 0.7
+capability_model:
+  source: https://github.com/vincentmakes/turbo-ea-capabilities
+  license: CC-BY-4.0
+  attribution: Turbo EA Capabilities by Vincent Verdet — Turbo EA, https://github.com/vincentmakes/turbo-ea-capabilities,
+    CC BY 4.0
+  notice: NOTICE
+edge_count: 1
+edges:
+- tag: Auth
+  spec_file: instantdb-auth-api-openapi.yml
+  capability_id: BC-620.20
+  capability_id_l1: BC-620
+  capability_name: Identity & Access Management
+  confidence: 0.72
+  evidence: POST /admin/magic_code 'Create a magic code'; POST /admin/verify_magic_code; GET /admin/users
+    'Look up a user'; POST /admin/sign_out 'Sign a user out'
+  reason: The operations issue and verify end-user credentials (magic codes, refresh tokens) and manage
+    user accounts and sessions — identity and access management delivered as a developer service.

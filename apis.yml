@@ -200,6 +200,9 @@ apis:
   - type: Documentation
     url: https://www.instantdb.com/docs/storage
 common:
+- type: CapabilityMap
+  url: capabilities/instantdb-capability-edges.yml
+  name: InstantDB Business Capability Map
 - type: AgenticAccess
   url: agentic-access/instantdb-agentic-access.yml
 - type: DomainSecurity
