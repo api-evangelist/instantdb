@@ -61,36 +61,6 @@ paths:
         '401':
           $ref: '#/components/responses/Error'
 components:
-  parameters:
-    AsEmail:
-      name: As-Email
-      in: header
-      required: false
-      description: Impersonate the user with this email (requires admin token).
-      schema:
-        type: string
-        format: email
-    AppId:
-      name: App-Id
-      in: header
-      required: true
-      description: The Instant application id.
-      schema:
-        type: string
-    AsToken:
-      name: As-Token
-      in: header
-      required: false
-      description: Impersonate the user holding this refresh token.
-      schema:
-        type: string
-    AsGuest:
-      name: As-Guest
-      in: header
-      required: false
-      description: Run the request as an unauthenticated guest.
-      schema:
-        type: boolean
   responses:
     Error:
       description: Error response.
@@ -104,6 +74,36 @@ components:
               message:
                 type: string
             additionalProperties: true
+  parameters:
+    AppId:
+      name: App-Id
+      in: header
+      required: true
+      description: The Instant application id.
+      schema:
+        type: string
+    AsEmail:
+      name: As-Email
+      in: header
+      required: false
+      description: Impersonate the user with this email (requires admin token).
+      schema:
+        type: string
+        format: email
+    AsGuest:
+      name: As-Guest
+      in: header
+      required: false
+      description: Run the request as an unauthenticated guest.
+      schema:
+        type: boolean
+    AsToken:
+      name: As-Token
+      in: header
+      required: false
+      description: Impersonate the user holding this refresh token.
+      schema:
+        type: string
   securitySchemes:
     adminToken:
       type: http
