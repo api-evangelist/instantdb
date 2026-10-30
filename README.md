@@ -1,4 +1,4 @@
-# InstantDB (instantdb)
+# InstantDB
 
 <!-- API-EVANGELIST-PROVENANCE:BEGIN -->
 > ### About this repository
@@ -66,159 +66,151 @@
 
 InstantDB (Instant) is a realtime client-side database and Firebase alternative that gives apps a sync engine with multiplayer, offline mode, and optimistic updates by default. It exposes an HTTP Admin API (api.instantdb.com) for server-side InstaQL queries and InstaML transactions, plus auth, storage, presence, and a realtime WebSocket sync layer.
 
-**APIs.json:** [https://raw.githubusercontent.com/api-evangelist/instantdb/refs/heads/main/apis.yml](https://raw.githubusercontent.com/api-evangelist/instantdb/refs/heads/main/apis.yml)
+**Areas:** Database · Real-Time · Sync · Backend · Local-First
 
-## Tags
+## InstantDB on APIs.io
 
-- Database
-- Realtime
-- Sync
-- Backend
-- Local First
+Everything profiled for InstantDB is published on APIs.io rather than in this repository. Start at the provider page — **[apis.io/providers/instantdb/](https://apis.io/providers/instantdb/)** — or go straight to one of the APIs or properties below.
 
-## Timestamps
+### APIs (6)
 
-- **Created:** 2026-06-20
-- **Modified:** 2026-06-20
+- [InstantDB Realtime Sync API](https://apis.io/apis/instantdb/instantdb-realtime-sync-api/) — The realtime sync transport - a persistent WebSocket at wss://api.instantdb.com/runtime/session over which the client Reactor sends init, add-query,…
+- [InstantDB Auth API](https://apis.io/apis/instantdb/instantdb-auth-api/) — Server-side authentication, tokens, and users.
+- [InstantDB Presence API](https://apis.io/apis/instantdb/instantdb-presence-api/) — Room presence lookups.
+- [InstantDB Query API](https://apis.io/apis/instantdb/instantdb-query-api/) — InstaQL read queries.
+- [InstantDB Storage API](https://apis.io/apis/instantdb/instantdb-storage-api/) — File upload, listing, and deletion.
+- [InstantDB Transactions API](https://apis.io/apis/instantdb/instantdb-transactions-api/) — InstaML transaction writes.
 
-## APIs
+### Published properties
 
-### InstantDB Admin HTTP API
+Each property below is a page on APIs.io carrying the machine-readable artifact and what it says.
 
-Server-side HTTP Admin API at api.instantdb.com, authenticated with a Bearer admin token and an App-Id header, that bypasses permissions to run InstaQL queries, InstaML transactions, auth, storage, and presence operations.
+#### AsyncAPI (1)
 
-- **Human URL:** [https://www.instantdb.com/docs/http-api](https://www.instantdb.com/docs/http-api)
-- **Base URL:** `https://api.instantdb.com`
+Event-driven and webhook contracts.
 
-#### Tags
+- [InstantDB Realtime Sync (WebSocket)](https://apis.io/asyncapis/instantdb/instantdb-asyncapi/)
 
-- Admin
-- HTTP
-- Backend
+#### Event channels (1)
 
-#### Properties
+Individual events and webhooks the provider emits.
 
-- [Documentation](https://www.instantdb.com/docs/http-api)
-- [API Reference](https://www.instantdb.com/docs/http-api)
-- [OpenAPI](openapi/instantdb-openapi.yml) — [OpenAPI Specification](https://spec.openapis.org/oas/latest.html)
-- [Postman Collection](collections/instantdb.postman_collection.json) — [Postman Collection 2.1](https://schema.getpostman.com/json/collection/v2.1.0/collection.json)
-- [Open Collection](collections/instantdb.opencollection.json) — [Open Collection 1.0](https://schema.opencollection.com/opencollection/v1.0.0.json)
+- [/runtime/session](https://apis.io/channels/instantdb/runtime-session/)
 
-### InstantDB Query (InstaQL) API
+#### MCP servers (1)
 
-Reads data with InstaQL, Instant's relational GraphQL-like query language, via POST /admin/query — returning nested entities in a single round trip with optional rule parameters.
+Model Context Protocol servers that expose the API to agents.
 
-- **Human URL:** [https://www.instantdb.com/docs/instaql](https://www.instantdb.com/docs/instaql)
-- **Base URL:** `https://api.instantdb.com`
+- [instantdb](https://apis.io/servers/instantdb/instantdb/)
 
-#### Tags
+#### Agentic access (1)
 
-- Query
-- InstaQL
-- Read
+Which operations an agent can call, which act, and which need a human in the loop.
 
-#### Properties
+- [Instantdb Agentic Access](https://apis.io/agentic-access/instantdb/instantdb-agentic-access/)
 
-- [Documentation](https://www.instantdb.com/docs/instaql)
-- [API Reference](https://www.instantdb.com/docs/http-api)
-- [OpenAPI](openapi/instantdb-openapi.yml) — [OpenAPI Specification](https://spec.openapis.org/oas/latest.html)
-- [Postman Collection](collections/instantdb.postman_collection.json) — [Postman Collection 2.1](https://schema.getpostman.com/json/collection/v2.1.0/collection.json)
-- [Open Collection](collections/instantdb.opencollection.json) — [Open Collection 1.0](https://schema.opencollection.com/opencollection/v1.0.0.json)
+#### Collections (6)
 
-### InstantDB Transactions (InstaML) API
+Postman and Open Collection request collections.
 
-Writes, updates, links, and deletes data with InstaML transaction steps via POST /admin/transact, applied atomically as an admin that bypasses permission rules.
+- [InstantDB Admin HTTP API](https://apis.io/collections/instantdb/open-instantdb/)
+- [InstantDB Admin HTTP Auth API](https://apis.io/collections/instantdb/open-instantdb-auth-api/)
+- [InstantDB Admin HTTP Auth Presence API](https://apis.io/collections/instantdb/open-instantdb-presence-api/)
+- [InstantDB Admin HTTP Auth Query API](https://apis.io/collections/instantdb/open-instantdb-query-api/)
+- [InstantDB Admin HTTP Auth Storage API](https://apis.io/collections/instantdb/open-instantdb-storage-api/)
+- [InstantDB Admin HTTP Auth Transactions API](https://apis.io/collections/instantdb/open-instantdb-transactions-api/)
 
-- **Human URL:** [https://www.instantdb.com/docs/instaml](https://www.instantdb.com/docs/instaml)
-- **Base URL:** `https://api.instantdb.com`
+#### Governance rules (1)
 
-#### Tags
+Spectral rulesets for the provider's contracts.
 
-- Transactions
-- InstaML
-- Write
+- [InstantDB — asyncapi rules](https://apis.io/rules/instantdb/instantdb-asyncapi-spectral-rules/)
 
-#### Properties
+#### Security (2)
 
-- [Documentation](https://www.instantdb.com/docs/instaml)
-- [API Reference](https://www.instantdb.com/docs/http-api)
-- [OpenAPI](openapi/instantdb-openapi.yml) — [OpenAPI Specification](https://spec.openapis.org/oas/latest.html)
-- [Postman Collection](collections/instantdb.postman_collection.json) — [Postman Collection 2.1](https://schema.getpostman.com/json/collection/v2.1.0/collection.json)
-- [Open Collection](collections/instantdb.opencollection.json) — [Open Collection 1.0](https://schema.opencollection.com/opencollection/v1.0.0.json)
+Authentication, trust centre, and vulnerability disclosure.
 
-### InstantDB Auth API
+- [Instantdb Authentication](https://apis.io/security/instantdb/instantdb-authentication/)
+- [Instantdb Domain Security](https://apis.io/security/instantdb/instantdb-domain-security/)
 
-Server-side auth — mint refresh tokens, create/send/verify magic codes, look up and delete users, and sign users out — over /admin/refresh_tokens, /admin/magic_code, /admin/users, and related endpoints.
+#### Plans and pricing (1)
 
-- **Human URL:** [https://www.instantdb.com/docs/auth](https://www.instantdb.com/docs/auth)
-- **Base URL:** `https://api.instantdb.com`
+Published plans, tiers and prices.
 
-#### Tags
+- [Instantdb Plans Pricing](https://apis.io/plans/instantdb/instantdb-plans-pricing/)
 
-- Auth
-- Tokens
-- Magic Code
+#### Rate limits (1)
 
-#### Properties
+Published request limits.
 
-- [Documentation](https://www.instantdb.com/docs/auth)
-- [API Reference](https://www.instantdb.com/docs/http-api)
-- [OpenAPI](openapi/instantdb-openapi.yml) — [OpenAPI Specification](https://spec.openapis.org/oas/latest.html)
-- [Postman Collection](collections/instantdb.postman_collection.json) — [Postman Collection 2.1](https://schema.getpostman.com/json/collection/v2.1.0/collection.json)
-- [Open Collection](collections/instantdb.opencollection.json) — [Open Collection 1.0](https://schema.opencollection.com/opencollection/v1.0.0.json)
+- [Instantdb Rate Limits](https://apis.io/rate-limits/instantdb/instantdb-rate-limits/)
 
-### InstantDB Storage API
+#### FinOps (1)
 
-Uploads, lists, and deletes files in Instant's object storage via PUT /admin/storage/upload, the $files query namespace, and the storage delete endpoints, with files surfaced as first-class entities.
+What the API costs to run, by operation.
 
-- **Human URL:** [https://www.instantdb.com/docs/storage](https://www.instantdb.com/docs/storage)
-- **Base URL:** `https://api.instantdb.com`
+- [Instantdb Finops](https://apis.io/finops/instantdb/instantdb-finops/)
 
-#### Tags
+## Where to find this API
 
-- Storage
-- Files
-- Uploads
+Links to the company's own pages. This repository publishes no copy of their specifications — the canonical document is theirs and lives at the URLs below.
 
-#### Properties
-
-- [Documentation](https://www.instantdb.com/docs/storage)
-- [API Reference](https://www.instantdb.com/docs/http-api)
-- [OpenAPI](openapi/instantdb-openapi.yml) — [OpenAPI Specification](https://spec.openapis.org/oas/latest.html)
-- [Postman Collection](collections/instantdb.postman_collection.json) — [Postman Collection 2.1](https://schema.getpostman.com/json/collection/v2.1.0/collection.json)
-- [Open Collection](collections/instantdb.opencollection.json) — [Open Collection 1.0](https://schema.opencollection.com/opencollection/v1.0.0.json)
-
-### InstantDB Realtime Sync API
-
-The realtime sync transport — a persistent WebSocket at wss://api.instantdb.com/runtime/session over which the client Reactor sends init, add-query, transact, and presence ops and the server streams query novelty (refresh-ok), presence, and broadcasts back to subscribers.
-
-- **Human URL:** [https://www.instantdb.com/essays/architecture](https://www.instantdb.com/essays/architecture)
-- **Base URL:** `wss://api.instantdb.com/runtime/session`
-
-#### Tags
-
-- Realtime
-- WebSocket
-- Sync
-- Presence
-
-#### Properties
-
-- [Documentation](https://www.instantdb.com/essays/architecture)
-- [API Reference](https://www.instantdb.com/docs/presence-and-topics)
-- [AsyncAPI](asyncapi/instantdb-asyncapi.yml) — [AsyncAPI Specification](https://www.asyncapi.com/docs/reference/specification/latest)
-
-## Common Properties
-
-- [GitHub Organization](https://github.com/instantdb)
-- [LinkedIn](https://www.linkedin.com/company/instantdb)
 - [Website](https://www.instantdb.com)
 - [Documentation](https://www.instantdb.com/docs)
-- [Plans](plans/instantdb-plans-pricing.yml)
-- [Rate Limits](rate-limits/instantdb-rate-limits.yml)
-- [Fin Ops](finops/instantdb-finops.yml)
+- [Blog](https://www.instantdb.com/rss.xml)
+- [GitHub](https://github.com/instantdb)
 
-## Maintainers
+## API Evangelist rating
 
-**FN:** Kin Lane
-**Email:** kin@apievangelist.com
+**Kin Score 31.1** — thin · rubric 0.25.0 · scored 2026-10-23
+
+| Facet | Score |
+|---|---|
+| Discoverability | 68.3 |
+| Contract quality | 58.0 |
+| Contract governance | 13.6 |
+| Operational transparency | 10.5 |
+| Developer ergonomics | 32.1 |
+| Access clarity | 7.9 |
+
+**Agent readiness 47.4** — agent-ready (gated down from agent-native)
+
+| Agent-readiness dimension | Result |
+|---|---|
+| Spec Presence | yes |
+| Agentic Access | derived (partial credit) |
+| Reversibility Documented | — |
+| MCP Server | verified |
+| Auth Clarity | served (partial credit) |
+| Idempotency | — |
+| Error Semantics | — |
+| OpenAPI Examples | partial |
+| Rate Limit Signal | derived (partial credit) |
+| Event Surface Described | derived (partial credit) |
+| Agent Skills | — |
+| Well Known Catalog | — |
+| Consent Identity | — |
+| Agent Card | — |
+| Dry Run Mode | — |
+| Delegated Identity | served (partial credit) |
+| Protected Resource Metadata | verified |
+| Dynamic Client Registration | yes |
+| Agentic Commerce | — |
+| Pagination Ratio | na |
+| Operation Distinctiveness | distinct |
+
+**Regulatory alignment 11.8** — Horizontal (data, software, accessibility, platform)
+
+The rubric is published at [github.com/api-evangelist/kin-score](https://github.com/api-evangelist/kin-score). The per-check breakdown behind these numbers — which checks were earned, partial or missed — along with score history and how this provider compares to its peers, is available at [apis.io/providers/instantdb/](https://apis.io/providers/instantdb/).
+
+## How this profile is made
+
+API Evangelist profiles a company's public API surface the way a developer would find it: the website, developer portal and documentation, the specifications it publishes, its public repositories, and its pricing, status and changelog pages. From that it derives the properties above — contracts split per API, workflows, schemas, collections, governance rules, plans and rate limits — and scores them against the published [Kin Score rubric](https://github.com/api-evangelist/kin-score).
+
+The artifacts are published on [APIs.io](https://apis.io), not in this repository. This repository is the public record for InstantDB: the place to say something is wrong, missing or out of date, and to ask for a re-score or a removal.
+
+## Open an issue
+
+- **Something about this listing** — a wrong description, a missing API, a stale artifact or a question about the rating: [open an issue on this repository](https://github.com/api-evangelist/instantdb/issues/new).
+- **A new API, or one that is not in the catalog yet** — [submit it on APIs.io](https://apis.io/add/).
+- **Anything else** — [the APIs.io inbox](https://github.com/api-search/inbox/issues/new) or [info@apievangelist.com](mailto:info@apievangelist.com).
